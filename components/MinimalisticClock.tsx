@@ -57,7 +57,7 @@ export default function MinimalisticClock({ value, onChange }: ClockProps) {
         <motion.div
           className="absolute top-1/2 left-1/2 origin-left"
           style={{ width: "70px", height: "2px" }}
-          animate={{ rotate: currentAngle }}
+          animate={{ rotate: currentAngle - 90 }}
           transition={{
             type: "spring",
             stiffness: 200,
