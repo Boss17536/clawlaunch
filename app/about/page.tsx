@@ -60,8 +60,8 @@ export default function AboutPage() {
             </h1>
             
             <p className="text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
-              ClawLaunch was born from a simple idea: social media automation shouldn't feel robotic. 
-              We're building the future of authentic, AI-powered growth.
+              ClawLaunch was born from a simple idea: social media automation shouldn&apos;t feel robotic. 
+              We&apos;re building the future of authentic, AI-powered growth.
             </p>
           </div>
         </ScrollReveal>
@@ -155,7 +155,7 @@ export default function AboutPage() {
               Join the Revolution
             </h2>
             <p className="text-white/60 mb-8 max-w-2xl mx-auto">
-              Be part of a community that's redefining social media automation. 
+              Be part of a community that&apos;s redefining social media automation. 
               Start your journey today.
             </p>
             <motion.button
