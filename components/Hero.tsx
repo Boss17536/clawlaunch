@@ -96,23 +96,24 @@ export default function Hero() {
 function FloatingCard() {
   return (
     <motion.div
-      className="glass rounded-2xl p-8 border-2 relative overflow-hidden"
+      className="glass rounded-2xl p-8 border-2 relative overflow-hidden will-change-transform"
       style={{
         transformStyle: "preserve-3d",
         perspective: "1000px",
       }}
       animate={{
-        y: [0, -10, 0],
+        y: [0, -8, 0],
       }}
       transition={{
-        duration: 4,
+        duration: 5,
         repeat: Infinity,
-        ease: "easeInOut",
+        ease: "linear",
       }}
       whileHover={{
         scale: 1.02,
         rotateX: 5,
         rotateY: 5,
+        transition: { duration: 0.2 },
       }}
     >
       {/* Glow effect */}

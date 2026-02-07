@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { Bot, Linkedin, Twitter, Clock, Key, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useClickSound } from "./SoundEffect";
+import MinimalisticClock from "./MinimalisticClock";
 
 export default function ConfigDashboard() {
   const [botName, setBotName] = useState("");
@@ -10,6 +12,7 @@ export default function ConfigDashboard() {
   const [interval, setInterval] = useState(24);
   const [apiKey, setApiKey] = useState("");
   const [showApiKey, setShowApiKey] = useState(false);
+  const { playClick, playSuccess } = useClickSound();
   
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -35,6 +38,7 @@ export default function ConfigDashboard() {
   };
   
   const togglePlatform = (platform: string) => {
+    playClick();
     setSelectedPlatforms(prev =>
       prev.includes(platform)
         ? prev.filter(p => p !== platform)
@@ -125,37 +129,18 @@ export default function ConfigDashboard() {
           </div>
         </motion.div>
         
-        {/* Card 3: Schedule */}
+        {/* Card 3: Schedule - MINIMALISTIC CLOCK */}
         <motion.div
           variants={cardVariants}
-          whileHover={{ scale: 1.02 }}
-          className="glass glass-hover rounded-2xl p-6 transition-all duration-200"
+          className="glass glass-hover rounded-2xl p-6 transition-all duration-200 md:col-span-2"
         >
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-electric/20 flex items-center justify-center">
               <Clock className="w-5 h-5 text-electric" />
             </div>
             <h3 className="text-lg font-semibold">Post Interval</h3>
           </div>
-          <div className="space-y-4">
-            <div className="flex justify-between text-sm text-white/60">
-              <span>12h</span>
-              <span className="text-electric font-semibold">{interval}h</span>
-              <span>48h</span>
-            </div>
-            <input
-              type="range"
-              min="12"
-              max="48"
-              step="12"
-              value={interval}
-              onChange={(e) => setInterval(Number(e.target.value))}
-              className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer slider"
-              style={{
-                background: `linear-gradient(to right, #4ade80 0%, #4ade80 ${((interval - 12) / 36) * 100}%, rgba(255,255,255,0.1) ${((interval - 12) / 36) * 100}%, rgba(255,255,255,0.1) 100%)`,
-              }}
-            />
-          </div>
+          <MinimalisticClock value={interval} onChange={setInterval} />
         </motion.div>
         
         {/* Card 4: API Key */}
@@ -179,7 +164,10 @@ export default function ConfigDashboard() {
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 pr-12 outline-none focus:border-cyber/50 focus:ring-2 focus:ring-cyber/20 transition-all duration-200 font-mono text-sm"
             />
             <button
-              onClick={() => setShowApiKey(!showApiKey)}
+              onClick={() => {
+                playClick();
+                setShowApiKey(!showApiKey);
+              }}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors"
             >
               {showApiKey ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -198,6 +186,7 @@ export default function ConfigDashboard() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={playSuccess}
           className="px-8 py-4 bg-gradient-to-r from-electric to-cyber rounded-xl font-semibold text-lg glow-green hover:glow-purple transition-all duration-300"
         >
           Launch Configuration

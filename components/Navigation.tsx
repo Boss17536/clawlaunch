@@ -4,9 +4,11 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sparkles } from "lucide-react";
+import { useClickSound } from "./SoundEffect";
 
 export default function Navigation() {
   const pathname = usePathname();
+  const { playClick } = useClickSound();
   
   const links = [
     { href: "/", label: "Home" },
@@ -44,6 +46,7 @@ export default function Navigation() {
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={playClick}
                   className={`relative px-4 py-2 rounded-lg transition-colors ${
                     isActive ? "text-white" : "text-white/60 hover:text-white"
                   }`}
@@ -66,6 +69,7 @@ export default function Navigation() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={playClick}
           className="px-4 py-2 bg-gradient-to-r from-electric to-cyber rounded-lg font-semibold text-sm glow-green"
         >
           Get Started
