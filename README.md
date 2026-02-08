@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/logo.svg" alt="ClawLaunch Logo" width="100" height="100" />
+  <img src="public/logo.png" alt="ClawLaunch Logo" width="100" height="100" />
   
   # ClawLaunch 🚀
   
@@ -74,4 +74,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <div align="center">
   Built with 💚 and ⚡ for the OpenClaw Ecosystem.
 </div>
-
