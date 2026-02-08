@@ -1,78 +1,76 @@
-# ClawLaunch 🚀
+<div align="center">
+  <img src="https://raw.githubusercontent.com/lucide-react/lucide/main/icons/rocket.svg" alt="ClawLaunch Logo" width="80" height="80" />
+  
+  # ClawLaunch 🚀
+  
+  **The Elite Open-Source Command Center for LinkedIn & X Automation.**
+  
+  [![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://clawlaunch.vercel.app)
+  [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+  [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-blue?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
+  
+  ---
+  
+  ### 🌌 Automate Your Growth with a Cyber-Glass Aesthetic.
+  *ClawLaunch is a stunning frontend interface designed for OpenClaw bot configuration, featuring a premium glassmorphism UI and butter-smooth animations.*
+</div>
 
-**Automate Your Growth** - The stunning frontend interface for OpenClaw bot configuration.
+## ✨ Key Features
 
-## ✨ Features
-
-- 🎨 **Cyber-Glass Aesthetic** - Glassmorphism UI with deep void background
-- ⚡ **Butter-Smooth 120Hz Animations** - Powered by Framer Motion
-- 🎭 **Interactive Bento Grid** - Beautiful card-based configuration layout
-- 🌊 **Parallax Effects** - 3D-ish floating elements with mouse tracking
-- 📱 **Fully Responsive** - Perfect mobile experience
-- 🎯 **Zero Backend** - Pure frontend showcase (for now)
+- 🎨 **Cyber-Glass UI**: A state-of-the-art Glassmorphism interface with deep void backgrounds.
+- ⚡ **120Hz Fluidity**: Staggered animations and staggered reveals powered by Framer Motion.
+- 🎭 **Interactive Bento Grid**: Beautiful, responsive card-based layout for intuitive configuration.
+- 🌊 **Parallax Dynamics**: 3D floating elements that track your mouse movement for a living UI.
+- 📱 **Adaptive Design**: Seamless experience across mobile, tablet, and desktop displays.
+- 🎯 **Developer First**: Built with Next.js 14 App Router and TypeScript for ultimate reliability.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Next.js 14 (App Router)
 - **Styling**: Tailwind CSS
-- **Animation**: Framer Motion
+- **Motion**: Framer Motion
 - **Icons**: Lucide React
-- **Fonts**: Inter + JetBrains Mono
+- **Typography**: Inter & JetBrains Mono
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
-1. Install dependencies:
-```bash
-npm install
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Boss17536/clawlaunch.git
+   ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Ignite the development server:**
+   ```bash
+   npm run dev
+   ```
+4. **Open the cockpit:**
+   Navigate to [http://localhost:3000](http://localhost:3000).
 
-2. Run the development server:
-```bash
-npm run dev
-```
+## 🎨 Design Philosophy
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+ClawLaunch follows a **Dark-Modern** aesthetic, focusing on:
+- **Depth**: Multi-layered transparency and `backdrop-blur-xl`.
+- **Glow**: Subtle accent borders using `Electric Green` (#4ade80) and `Cyber Purple` (#c084fc).
+- **Precision**: Pixel-perfect spacing and 200ms easing functions.
 
-## 🎨 Design System
+## 📦 Project Overview
 
-### Colors
-- **Void Black**: `#020202` - Base background
-- **Electric Green**: `#4ade80` - Active states
-- **Cyber Purple**: `#c084fc` - Magic moments
-
-### Effects
-- Glassmorphism: `backdrop-blur-xl` + `bg-white/5`
-- Glow shadows on hover states
-- Animated radial gradients for "breathing" effect
-- Smooth 200ms transitions everywhere
-
-## 📦 Project Structure
-
-```
+```text
 ClawLaunch/
-├── app/
-│   ├── layout.tsx
-│   ├── page.tsx
-│   └── globals.css
-├── components/
-│   ├── AnimatedBackground.tsx
-│   ├── Hero.tsx
-│   ├── ConfigDashboard.tsx
-│   └── TerminalPreview.tsx
-└── ...config files
+├── app/            # App Router (Pages & Styles)
+├── components/     # High-Performance UI Components
+└── ...             # Modern Tooling Config
 ```
-
-## 🎯 Components
-
-- **Hero**: Staggered text reveal animation with floating 3D card
-- **ConfigDashboard**: Bento grid with 4 interactive cards
-- **TerminalPreview**: VS Code-style terminal with blinking cursor
-- **AnimatedBackground**: Breathing gradients and grain texture
 
 ## 📝 License
 
-MIT - Built for OpenClaw
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
-
-Made with 💚 and ⚡ by a World-Class UI/UX Designer
+<div align="center">
+  Built with 💚 and ⚡ for the OpenClaw Ecosystem.
+</div>
