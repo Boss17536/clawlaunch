@@ -1,39 +1,5 @@
 <div align="center">
-  <img src="<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-    <linearGradient id="clawGradient" x1="10" y1="10" x2="70" y2="70" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#4ade80" /> <stop offset="1" stop-color="#22c55e" /> </linearGradient>
-    <linearGradient id="launchGradient" x1="30" y1="40" x2="60" y2="10" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#c084fc" /> <stop offset="1" stop-color="#a855f7" /> </linearGradient>
-  </defs>
-
-  <circle cx="40" cy="40" r="38" fill="#0a0a0a" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
-
-  <path 
-    d="M28 22C24 26 20 32 20 40C20 51.0457 28.9543 60 40 60C46 60 51 57 55 53" 
-    stroke="url(#clawGradient)" 
-    stroke-width="5" 
-    stroke-linecap="round" 
-    stroke-linejoin="round"
-    filter="url(#glow)"
-  />
-  
-  <path 
-    d="M38 42L58 22M58 22H44M58 22V36" 
-    stroke="url(#launchGradient)" 
-    stroke-width="5" 
-    stroke-linecap="round" 
-    stroke-linejoin="round"
-    filter="url(#glow)"
-  />
-</svg>" alt="ClawLaunch Logo" width="80" height="80" />
+  <img src="file:///C:/Users/Boss/Downloads/Gemini_Generated_Image_czm5upczm5upczm5.png" alt="ClawLaunch Logo" width="80" height="80" />
   
   # ClawLaunch 🚀
   
