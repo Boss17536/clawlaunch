@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/lucide-react/lucide/main/icons/rocket.svg" alt="ClawLaunch Logo" width="80" height="80" />
+  <img src="public/logo.svg" alt="ClawLaunch Logo" width="100" height="100" />
   
   # ClawLaunch 🚀
   
