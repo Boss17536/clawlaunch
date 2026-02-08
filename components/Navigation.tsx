@@ -12,9 +12,7 @@ export default function Navigation() {
   
   const links = [
     { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
     { href: "/pricing", label: "Pricing" },
-    { href: "/docs", label: "Docs" },
   ];
   
   return (
@@ -66,14 +64,16 @@ export default function Navigation() {
         </div>
         
         {/* CTA Button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={playClick}
-          className="px-4 py-2 bg-gradient-to-r from-electric to-cyber rounded-lg font-semibold text-sm glow-green"
-        >
-          Get Started
-        </motion.button>
+        <Link href="/pricing">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={playClick}
+            className="px-4 py-2 bg-gradient-to-r from-electric to-cyber rounded-lg font-semibold text-sm glow-green"
+          >
+            Get Started
+          </motion.button>
+        </Link>
       </div>
     </motion.nav>
   );
