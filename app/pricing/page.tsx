@@ -7,61 +7,42 @@ import ScrollReveal from "@/components/ScrollReveal";
 export default function PricingPage() {
   const plans = [
     {
-      name: "Starter",
+      name: "Free",
       icon: Sparkles,
       price: "0",
       period: "forever",
-      description: "Perfect for trying out ClawLaunch",
+      description: "Perfect for getting started",
       features: [
-        "1 social account",
-        "10 posts per month",
-        "Basic analytics",
+        "1 platform (LinkedIn or X)",
+        "Basic automation",
+        "50 posts per month",
         "Community support",
         "Standard templates",
+        "Basic analytics",
       ],
       cta: "Start Free",
       popular: false,
       gradient: "from-white/10 to-white/5",
     },
     {
-      name: "Pro",
+      name: "Premium",
       icon: Zap,
-      price: "29",
+      price: "2",
       period: "per month",
-      description: "For serious content creators",
+      description: "Unlock full automation power",
       features: [
-        "5 social accounts",
+        "Both platforms (LinkedIn & X)",
         "Unlimited posts",
-        "Advanced analytics",
+        "Advanced automation",
         "Priority support",
         "Custom templates",
-        "AI content suggestions",
-        "Schedule optimization",
+        "AI-powered scheduling",
+        "Advanced analytics",
+        "Content optimization",
       ],
-      cta: "Start Pro Trial",
+      cta: "Get Premium",
       popular: true,
       gradient: "from-electric/20 to-cyber/20",
-    },
-    {
-      name: "Enterprise",
-      icon: Rocket,
-      price: "99",
-      period: "per month",
-      description: "For teams and agencies",
-      features: [
-        "Unlimited accounts",
-        "Unlimited posts",
-        "Enterprise analytics",
-        "24/7 dedicated support",
-        "Custom integrations",
-        "White-label options",
-        "Team collaboration",
-        "API access",
-        "Custom AI training",
-      ],
-      cta: "Contact Sales",
-      popular: false,
-      gradient: "from-cyber/20 to-electric/20",
     },
   ];
   
@@ -92,7 +73,7 @@ export default function PricingPage() {
         </ScrollReveal>
         
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
           {plans.map((plan, index) => {
             const Icon = plan.icon;
             return (
