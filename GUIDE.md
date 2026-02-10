@@ -16,10 +16,10 @@ Before you begin, ensure you have the following:
 
 ## 🛠️ Phase 2: Installation
 
-You don't need to install anything globally if you use this command. Just run:
+You don't need to install anything globally. Just run:
 
 ```bash
-npm install clawlaunch-cli && clawlaunch init
+npx -y clawlaunch-cli init
 ```
 
 ### What happens during Init?
@@ -47,7 +47,7 @@ npx clawlaunch-cli daemon
 You can also specify the platform directly:
 
 ```bash
-npm install clawlaunch-cli && clawlaunch init --platform=linkedin
+npx -y clawlaunch-cli init --platform=linkedin
 ```
 
 ### 2. The Notification
@@ -99,5 +99,5 @@ High-quality images can take up to 30 seconds to generate. Be patient!
 ---
 
 <div align="center">
-  <p>Ready to launch? Run <code>npx clawlaunch-cli init</code> now!</p>
+  <p>Ready to launch? Run <code>npx -y clawlaunch-cli init</code> now!</p>
 </div>
