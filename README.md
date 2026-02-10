@@ -35,7 +35,7 @@ ClawLaunch isn't just another scheduler. It's a **developer-first CLI tool** des
 
 ### 1. Initialize
 
-RYou don't need to install anything globally. Just run this one-liner:
+You don't need to install anything globally. Just run this one-liner:
 
 ```bash
 npx -y clawlaunch-cli init
