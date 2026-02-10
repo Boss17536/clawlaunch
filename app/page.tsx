@@ -200,7 +200,7 @@ export default function Home() {
                 <span className="relative z-10 flex items-center gap-2">
                   Generate Command <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-electric to-cyber opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-electric to-cyber opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none" />
               </button>
             </div>
           
