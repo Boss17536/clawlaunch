@@ -12,7 +12,6 @@ export default function Navigation() {
   
   const links = [
     { href: "/", label: "Home" },
-    { href: "/pricing", label: "Pricing" },
   ];
   
   return (
@@ -64,7 +63,7 @@ export default function Navigation() {
         </div>
         
         {/* CTA Button */}
-        <Link href="/pricing">
+        <Link href="/">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

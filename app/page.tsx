@@ -245,6 +245,165 @@ export default function Home() {
         </div>
       </motion.div>
 
+      {/* Free vs Paid Comparison */}
+      <div className="w-full max-w-7xl mt-32 z-10 px-4">
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-electric/20 to-cyber/20 border border-electric/30 mb-6"
+          >
+            <Zap className="w-4 h-4 text-electric" />
+            <span className="text-sm font-semibold text-electric">Choose What Works For You</span>
+          </motion.div>
+          <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-electric to-cyber bg-clip-text text-transparent">
+            Free vs Premium
+          </h2>
+          <p className="text-white/50 text-lg max-w-2xl mx-auto">
+            Start for free, upgrade when you&apos;re ready to dominate 🚀
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {/* Free Plan */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="glass-card p-8 rounded-3xl border border-white/10 hover:border-white/20 transition-all relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Sparkles className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-3xl font-bold">Free</h3>
+                  <p className="text-white/40 text-sm">Get started today</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">20 Posts per Month</p>
+                    <p className="text-sm text-white/40">Build consistency without pressure</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">1 Account Only</p>
+                    <p className="text-sm text-white/40">LinkedIn OR Twitter/X</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">AI-Generated Posts</p>
+                    <p className="text-sm text-white/40">Smart content that engages</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">Scheduling System</p>
+                    <p className="text-sm text-white/40">Automate your posting time</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                <p className="text-3xl font-bold mb-1">$0</p>
+                <p className="text-white/40 text-sm">Forever Free</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Premium Plan */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="glass-card p-8 rounded-3xl border-2 border-electric/50 hover:border-electric transition-all relative overflow-hidden group shadow-[0_0_50px_-10px_rgba(0,255,136,0.3)]"
+          >
+            {/* Premium Badge */}
+            <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-to-br from-electric to-cyber rounded-full blur-3xl opacity-30 pointer-events-none" />
+            <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-gradient-to-r from-electric to-cyber text-xs font-bold text-void">
+              ⚡ PREMIUM
+            </div>
+            
+            <div className="absolute inset-0 bg-gradient-to-br from-electric/5 to-cyber/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-electric to-cyber flex items-center justify-center">
+                  <Crown className="w-7 h-7 text-void" />
+                </div>
+                <div>
+                  <h3 className="text-3xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">Premium</h3>
+                  <p className="text-white/40 text-sm">Unlock full power</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <Rocket className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">Unlimited Posts</p>
+                    <p className="text-sm text-white/40">Post as much as you want!</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Users className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">Unlimited Accounts</p>
+                    <p className="text-sm text-white/40">LinkedIn AND Twitter/X + more</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Sparkles className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">AI Image Generation</p>
+                    <p className="text-sm text-white/40">Eye-catching visuals included</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Zap className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">Priority Support</p>
+                    <p className="text-sm text-white/40">Get help when you need it</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">Advanced Analytics</p>
+                    <p className="text-sm text-white/40">Track your growth in real-time</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-lg">Custom Features</p>
+                    <p className="text-sm text-white/40">Built for your workflow</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 p-4 rounded-xl bg-gradient-to-r from-electric/20 to-cyber/20 border border-electric/30 text-center">
+                <p className="text-3xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-1">$2/mo</p>
+                <p className="text-white/60 text-sm font-semibold">⚡ Best Value!</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
       {/* Contact Section */}
       <div className="w-full max-w-7xl mt-24 z-10 px-4">
         <div className="text-center mb-16">
