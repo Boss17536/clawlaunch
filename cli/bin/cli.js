@@ -17,6 +17,21 @@ function showBanner() {
 }
 
 /**
+ * Show installation tip for easier usage
+ */
+function showInstallTip() {
+  const isGloballyInstalled = __dirname.includes('node_modules');
+  
+  if (!isGloballyInstalled) {
+    console.log(chalk.yellow('\n💡 Tip: Install globally to use "clawlaunch" command anywhere:\n'));
+    console.log(chalk.gray('   cd clawlaunch'));
+    console.log(chalk.gray('   npm install'));
+    console.log(chalk.gray('   npm link\n'));
+    console.log(chalk.green('   Then just type: clawlaunch\n'));
+  }
+}
+
+/**
  * Show help/usage information
  */
 function showHelp() {
@@ -339,6 +354,7 @@ async function main() {
   }
   
   showBanner();
+  showInstallTip();
   
   let config = loadConfig();
   

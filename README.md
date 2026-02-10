@@ -33,9 +33,9 @@ ClawLaunch isn't just another scheduler. It's a **developer-first CLI tool** des
 
 ## 🚀 Quick Start
 
-### 1. Install & Initialize
+### Option 1: Quick Try (No Installation)
 
-Run the setup wizard directly from GitHub:
+Run directly from GitHub with npx:
 
 ```bash
 npx -y github:Boss17536/clawlaunch init
@@ -47,34 +47,66 @@ Or specify your platform directly:
 npx -y github:Boss17536/clawlaunch init --platform=linkedin
 ```
 
-### 2. Start Scheduling
+### Option 2: Install Globally (Recommended)
 
-After setup, just run:
+Install once and use the `clawlaunch` command anywhere:
 
 ```bash
-npx github:Boss17536/clawlaunch start
+# Clone and install
+git clone https://github.com/Boss17536/clawlaunch.git
+cd clawlaunch
+npm install
+npm link
+
+# Now use it anywhere!
+clawlaunch init
+clawlaunch start
+clawlaunch test
+clawlaunch status
 ```
 
-Or run in background mode:
+### Option 3: Install via npm (Coming Soon)
 
 ```bash
-npx github:Boss17536/clawlaunch daemon
+npm install -g clawlaunch
+clawlaunch init
 ```
 
-### 3. Test Immediately
+---
 
-Want to test a post right now?
+## 📖 Commands
 
+Once installed globally with `npm link`, you can use these simple commands:
+
+### Initialize Setup
 ```bash
-npx github:Boss17536/clawlaunch test
+clawlaunch init
+clawlaunch init --platform=x
 ```
 
-### 4. Check Status
-
-View your configuration and usage limits:
-
+### Start Scheduler
 ```bash
-npx github:Boss17536/clawlaunch status
+clawlaunch start
+```
+
+### Run in Background
+```bash
+clawlaunch daemon
+```
+
+### Test Immediately
+```bash
+clawlaunch test
+```
+
+### Check Status
+```bash
+clawlaunch status
+```
+
+### Get Help
+```bash
+clawlaunch help
 ```
 
 ## 🛠️ Configuration

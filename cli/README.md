@@ -21,23 +21,40 @@ npm link
 
 ## 🎯 Quick Start
 
-### First Time Setup:
+### Option 1: One-Time Use (No Installation)
 ```bash
 npx -y github:Boss17536/clawlaunch init
-```
-
-### Start Posting:
-```bash
 npx github:Boss17536/clawlaunch start
 ```
 
+### Option 2: Install Globally (Use `clawlaunch` Command)
+```bash
+# Clone and install
+git clone https://github.com/Boss17536/clawlaunch.git
+cd clawlaunch
+npm install
+npm link
+
+# Now use simple commands!
+clawlaunch init
+clawlaunch start
+```
+
 ### Available Commands:
+After global installation with `npm link`, use these commands:
+
 - `clawlaunch` or `clawlaunch init` - Run setup wizard
 - `clawlaunch start` - Start the scheduler
 - `clawlaunch daemon` - Run in background mode
 - `clawlaunch test` - Test a post immediately
 - `clawlaunch status` - View configuration and limits
 - `clawlaunch help` - Show all commands
+
+**Without global install**, prefix with npx:
+```bash
+npx github:Boss17536/clawlaunch init
+npx github:Boss17536/clawlaunch start
+```
 
 ### Setup Questions (7 simple steps):
 1. Platform (Twitter/X or LinkedIn)
