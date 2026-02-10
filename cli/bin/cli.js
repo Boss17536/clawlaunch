@@ -227,7 +227,7 @@ function showStatus() {
 async function main() {
   showBanner();
   
-  const config = loadConfig();
+  let config = loadConfig();
   
   // If no config exists, run setup wizard
   if (!config) {
@@ -284,6 +284,7 @@ async function main() {
       
       if (reconfigureNow) {
         resetSchedulerDays();
+        config = loadConfig(); // Reload after reset
         console.log(chalk.green('✅ Scheduler reset! You can now use it for 5 more days.\n'));
       } else {
         console.log(chalk.yellow('⚠️  Cannot start scheduler without reconfiguration.\n'));
@@ -329,7 +330,7 @@ async function main() {
           deleteConfig();
           console.log(chalk.yellow('\n🔄 Configuration deleted. Restarting setup...\n'));
           const answers = await setupWizard();
-          saveConfig(answers);
+          config = saveConfig(answers); // Update local config variable
           console.log(chalk.green('\n✅ Reconfiguration complete!\n'));
         }
         break;

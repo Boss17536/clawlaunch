@@ -144,7 +144,7 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-6 mb-10 relative z-10">
               <button
                 onClick={() => setSelectedPlatform("linkedin")}
-                className={`relative group p-6 rounded-2xl border transition-all duration-300 text-left hover:-translate-y-1 ${
+                className={`relative z-20 group p-6 rounded-2xl border transition-all duration-300 text-left hover:-translate-y-1 ${
                   selectedPlatform === "linkedin" 
                     ? "border-electric bg-electric/10 shadow-[0_0_30px_-5px_rgba(74,222,128,0.2)]" 
                     : "border-white/10 bg-white/5 hover:border-electric/50 hover:bg-white/10"
@@ -168,7 +168,7 @@ export default function Home() {
 
               <button
                 onClick={() => setSelectedPlatform("x")}
-                className={`relative group p-6 rounded-2xl border transition-all duration-300 text-left hover:-translate-y-1 ${
+                className={`relative z-20 group p-6 rounded-2xl border transition-all duration-300 text-left hover:-translate-y-1 ${
                   selectedPlatform === "x" 
                     ? "border-electric bg-electric/10 shadow-[0_0_30px_-5px_rgba(74,222,128,0.2)]" 
                     : "border-white/10 bg-white/5 hover:border-electric/50 hover:bg-white/10"
@@ -191,7 +191,7 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="flex justify-center relative z-10">
+            <div className="flex justify-center relative z-20">
               <button 
                 onClick={handleSaveConfiguration}
                 disabled={!selectedPlatform}
@@ -281,7 +281,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-sm text-white/70 leading-relaxed group-hover:text-white transition-colors relative z-10">
-                "{review.content}"
+                &quot;{review.content}&quot;
               </p>
             </motion.div>
           ))}

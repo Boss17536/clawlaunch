@@ -12,6 +12,9 @@ let scheduledTask = null;
  * @returns {Object} - { hour, minute }
  */
 function parseTime(timeStr) {
+  if (!timeStr) {
+    throw new Error('Posting time is missing in configuration');
+  }
   const str = timeStr.trim().toUpperCase();
   
   // Handle AM/PM format
