@@ -33,15 +33,15 @@ ClawLaunch isn't just another scheduler. It's a **developer-first CLI tool** des
 
 ## 🚀 Quick Start
 
-### 1. Initialize
+### 1. Install & Initialize
 
-Run the initialization wizard directly from GitHub (installs and runs in one step):
+Run the setup wizard directly from GitHub:
 
 ```bash
 npx -y github:Boss17536/clawlaunch init
 ```
 
-You can also specify the platform directly:
+Or specify your platform directly:
 
 ```bash
 npx -y github:Boss17536/clawlaunch init --platform=linkedin
@@ -49,18 +49,32 @@ npx -y github:Boss17536/clawlaunch init --platform=linkedin
 
 ### 2. Start Scheduling
 
-Once configured, start the background daemon to handle posting.
+After setup, just run:
 
 ```bash
-npx clawlaunch-cli daemon
+npx github:Boss17536/clawlaunch start
 ```
 
-### 3. One-Off Post
-
-Want to post immediately?
+Or run in background mode:
 
 ```bash
-npx clawlaunch-cli post "Just shipped a new feature! 🚀 #coding #startup"
+npx github:Boss17536/clawlaunch daemon
+```
+
+### 3. Test Immediately
+
+Want to test a post right now?
+
+```bash
+npx github:Boss17536/clawlaunch test
+```
+
+### 4. Check Status
+
+View your configuration and usage limits:
+
+```bash
+npx github:Boss17536/clawlaunch status
 ```
 
 ## 🛠️ Configuration
@@ -85,18 +99,21 @@ If you want to contribute or run the latest dev version:
 
     ```bash
     git clone https://github.com/Boss17536/clawlaunch.git
-    cd clawlaunch
+    cd clawlaunch/cli
     ```
 
 2.  **Install Dependencies**
 
     ```bash
     npm install
+    npm link
     ```
 
 3.  **Run the CLI**
     ```bash
-    node cli/bin/cli.js
+    clawlaunch help
+    clawlaunch init
+    clawlaunch start
     ```
 
 ## 🤝 Contributing

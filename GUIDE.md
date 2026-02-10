@@ -14,7 +14,7 @@ Before you begin, ensure you have the following:
 
 ---
 
-## 🛠️ Phase 2: Installation
+## 🛠️ Phase 2: Installation & Setup
 
 You don't need to install anything globally. Just run this one-liner from GitHub:
 
@@ -22,13 +22,21 @@ You don't need to install anything globally. Just run this one-liner from GitHub
 npx -y github:Boss17536/clawlaunch init
 ```
 
+Or specify your platform for faster setup:
+
+```bash
+npx -y github:Boss17536/clawlaunch init --platform=linkedin
+```
+
 ### What happens during Init?
 
 1.  **Platform Selection**: Choose where you want to grow (LinkedIn or X).
 2.  **Topic Focus**: Pick a niche (Tech, Motivation, Fitness, etc.) so the AI can generate relevant content.
-3.  **Frequency**: Decide how many days a week you want to post.
-4.  **Timing**: Set your preferred posting time (e.g., 9:00 AM).
-5.  **AI Images**: Enable this if you want beautiful visuals generated automatically.
+3.  **Post Length**: Choose short (1-2 lines) or long (detailed) posts.
+4.  **Frequency**: Decide how many days a week you want to post (1-5).
+5.  **Timing**: Set your preferred posting time (e.g., 9:00 AM).
+6.  **Timezone**: Select your timezone for accurate scheduling.
+7.  **AI Images**: Enable this if you want beautiful visuals generated automatically.
 
 ---
 
@@ -36,18 +44,18 @@ npx -y github:Boss17536/clawlaunch init
 
 ClawLaunch works on a "Safety First" principle. It prepares the post for you, but **you** click the final "Post" button. This prevents accounts from being flagged as bots.
 
-### 1. Start the Daemon
+### 1. Start the Scheduler
 
-To keep the scheduler running in the background:
+After setup, simply run:
 
 ```bash
-npx clawlaunch-cli daemon
+npx github:Boss17536/clawlaunch start
 ```
 
-You can also specify the platform directly:
+Or run in background mode (keeps running even if you close the terminal):
 
 ```bash
-npx -y github:Boss17536/clawlaunch init --platform=linkedin
+npx github:Boss17536/clawlaunch daemon
 ```
 
 ### 2. The Notification
@@ -64,17 +72,37 @@ Review the content in the browser and hit **"Post"**. You're done!
 
 ---
 
-## 📊 Phase 4: Monitoring
+## 📊 Phase 4: Monitoring & Testing
 
-Check your usage and limits anytime:
+### Check Status
+
+View your configuration and usage limits anytime:
 
 ```bash
-npx clawlaunch-cli status
+npx github:Boss17536/clawlaunch status
 ```
+
+### Test a Post
+
+Want to test immediately without waiting for the schedule?
+
+```bash
+npx github:Boss17536/clawlaunch test
+```
+
+### Get Help
+
+See all available commands:
+
+```bash
+npx github:Boss17536/clawlaunch help
+```
+
+### Usage Limits
 
 - **Daily Limit**: 1 post per day.
 - **Monthly Limit**: 20 posts per month (Free Tier).
-- **Scheduler Life**: For security, the scheduler runs in 5-day periods. Every 6th day, just run `status` or `init` to refresh it.
+- **Scheduler Life**: For security, the scheduler runs in 5-day periods. Every 6th day, the system will prompt you to reset.
 
 ---
 

@@ -17,6 +17,22 @@ function showBanner() {
 }
 
 /**
+ * Show help/usage information
+ */
+function showHelp() {
+  console.log(chalk.cyan('\n📖 ClawLaunch Commands:\n'));
+  console.log(chalk.white('  clawlaunch                    ') + chalk.gray('Start interactive setup'));
+  console.log(chalk.white('  clawlaunch init               ') + chalk.gray('Run setup wizard'));
+  console.log(chalk.white('  clawlaunch init --platform=X  ') + chalk.gray('Quick setup for specific platform'));
+  console.log(chalk.white('  clawlaunch start              ') + chalk.gray('Start the scheduler'));
+  console.log(chalk.white('  clawlaunch daemon             ') + chalk.gray('Run in background mode'));
+  console.log(chalk.white('  clawlaunch test               ') + chalk.gray('Test post immediately'));
+  console.log(chalk.white('  clawlaunch status             ') + chalk.gray('View current configuration and limits'));
+  console.log(chalk.white('  clawlaunch help               ') + chalk.gray('Show this help message'));
+  console.log(chalk.gray('\n💡 After initial setup, just run "clawlaunch" to start!\n'));
+}
+
+/**
  * Setup wizard - asks 5 questions
  */
 async function setupWizard() {
@@ -225,6 +241,103 @@ function showStatus() {
  * Main CLI entry point
  */
 async function main() {
+  // Parse command line arguments
+  const args = process.argv.slice(2);
+  const command = args[0] || '';
+  
+  // Handle help command
+  if (command === 'help' || command === '--help' || command === '-h') {
+    showBanner();
+    showHelp();
+    return;
+  }
+  
+  // Handle init command
+  if (command === 'init') {
+    showBanner();
+    console.log(chalk.yellow('📝 Running setup wizard...\n'));
+    
+    // Check for platform flag
+    const platformFlag = args.find(arg => arg.startsWith('--platform='));
+    let presetPlatform = null;
+    if (platformFlag) {
+      presetPlatform = platformFlag.split('=')[1].toLowerCase();
+      if (presetPlatform === 'x') presetPlatform = 'twitter';
+    }
+    
+    const answers = await setupWizard();
+    if (presetPlatform) {
+      answers.platform = presetPlatform;
+    }
+    
+    console.log(chalk.cyan('\n💾 Saving configuration...\n'));
+    saveConfig(answers);
+    
+    console.log(chalk.green('✅ Setup complete!\n'));
+    console.log(chalk.gray('Run "clawlaunch start" to begin scheduling\n'));
+    return;
+  }
+  
+  // Handle daemon command
+  if (command === 'daemon') {
+    // Delegate to daemon.js
+    require('./daemon.js');
+    return;
+  }
+  
+  // Handle status command
+  if (command === 'status') {
+    showBanner();
+    showStatus();
+    return;
+  }
+  
+  // Handle test command
+  if (command === 'test') {
+    showBanner();
+    await testPost();
+    return;
+  }
+  
+  // Handle start command
+  if (command === 'start') {
+    showBanner();
+    const config = loadConfig();
+    if (!config) {
+      console.log(chalk.red('❌ No configuration found.\n'));
+      console.log(chalk.yellow('Run "clawlaunch init" to set up first.\n'));
+      return;
+    }
+    
+    // Check if scheduler needs reconfiguration
+    const schedulerCheck = checkSchedulerDays();
+    if (schedulerCheck.needsReconfigure) {
+      console.log(chalk.red('\n⚠️  Your 5-day scheduler period has ended!'));
+      console.log(chalk.yellow('You need to reconfigure the scheduler to continue.\n'));
+      
+      const { reconfigureNow } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'reconfigureNow',
+          message: 'Reset scheduler for another 5 days?',
+          default: true
+        }
+      ]);
+      
+      if (reconfigureNow) {
+        resetSchedulerDays();
+        console.log(chalk.green('✅ Scheduler reset! You can now use it for 5 more days.\n'));
+      } else {
+        console.log(chalk.yellow('⚠️  Cannot start scheduler without reconfiguration.\n'));
+        process.exit(0);
+      }
+    }
+    
+    startScheduler(config);
+    process.stdin.resume();
+    return;
+  }
+  
   showBanner();
   
   let config = loadConfig();
@@ -232,6 +345,7 @@ async function main() {
   // If no config exists, run setup wizard
   if (!config) {
     console.log(chalk.yellow('👋 First time setup - let\'s get you started!\n'));
+    console.log(chalk.gray('💡 Tip: Use "clawlaunch help" to see all available commands\n'));
     
     const answers = await setupWizard();
     
@@ -257,7 +371,7 @@ async function main() {
       // Keep process alive
       process.stdin.resume();
     } else {
-      console.log(chalk.gray('\nRun "social-poster" anytime to start the scheduler.\n'));
+      console.log(chalk.gray('\nRun "clawlaunch start" anytime to start the scheduler.\n'));
     }
     
     return;

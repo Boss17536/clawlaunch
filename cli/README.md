@@ -21,27 +21,38 @@ npm link
 
 ## 🎯 Quick Start
 
-1. Run the CLI:
+### First Time Setup:
 ```bash
-clawlaunch
+npx -y github:Boss17536/clawlaunch init
 ```
 
-2. Answer 7 simple questions:
-   - Platform (Twitter/X or LinkedIn)
-   - Topic (motivation, fitness, tech, business, or default)
-   - **Post Length** (short or long) ⭐ NEW
-   - Posts per week (1-5)
-   - Posting time (e.g., "9:00 AM")
-   - Timezone (e.g., "America/New_York")
-   - **AI Images** (enable/disable, optional API key) ⭐ NEW
+### Start Posting:
+```bash
+npx github:Boss17536/clawlaunch start
+```
 
-3. Keep the terminal open - scheduler runs in background
+### Available Commands:
+- `clawlaunch` or `clawlaunch init` - Run setup wizard
+- `clawlaunch start` - Start the scheduler
+- `clawlaunch daemon` - Run in background mode
+- `clawlaunch test` - Test a post immediately
+- `clawlaunch status` - View configuration and limits
+- `clawlaunch help` - Show all commands
 
-4. At scheduled time:
-   - Browser opens with pre-filled post
-   - **If AI images enabled**: Image URL displayed in console
-   - Click "Post" manually (1 click)
-   - Done! 🎉
+### Setup Questions (7 simple steps):
+1. Platform (Twitter/X or LinkedIn)
+2. Topic (motivation, fitness, tech, business, or default)
+3. **Post Length** (short or long) ⭐
+4. Posts per week (1-5)
+5. Posting time (e.g., "9:00 AM")
+6. Timezone (e.g., "America/New_York")
+7. **AI Images** (enable/disable, optional API key) ⭐
+
+### What Happens at Scheduled Time:
+- Browser opens with pre-filled post
+- **If AI images enabled**: Image URL displayed in console
+- Click "Post" manually (1 click)
+- Done! 🎉
 
 📖 **Documentation:**
 - [FEATURES.md](FEATURES.md) - Detailed feature guide
