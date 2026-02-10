@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, LayoutGrid, Star, Terminal, Check, Copy } from "lucide-react";
+import { ArrowRight, LayoutGrid, Star, Terminal, Check, Copy, Zap, Crown, Users, MessageCircle, Mail, Sparkles, Rocket } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -245,8 +245,219 @@ export default function Home() {
         </div>
       </motion.div>
 
+      {/* Pricing Section */}
+      <div className="w-full max-w-7xl mt-24 z-10 px-4">
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-electric/20 to-cyber/20 border border-electric/30 mb-6"
+          >
+            <Sparkles className="w-4 h-4 text-electric" />
+            <span className="text-sm font-semibold text-electric">Simple Pricing, Maximum Value</span>
+          </motion.div>
+          <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-electric to-cyber bg-clip-text text-transparent">
+            Choose Your Growth Plan
+          </h2>
+          <p className="text-white/50 text-lg max-w-2xl mx-auto">
+            Start free, upgrade when you&apos;re ready to dominate social media 🚀
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {/* Free Plan */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="glass-card p-8 rounded-3xl border border-white/10 hover:border-white/20 transition-all relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold">Free Plan</h3>
+                  <p className="text-white/40 text-sm">Perfect to get started</p>
+                </div>
+              </div>
+
+              <div className="mb-8">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-bold">$0</span>
+                  <span className="text-white/40">/forever</span>
+                </div>
+              </div>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">20 Posts per Month</p>
+                    <p className="text-sm text-white/40">Enough to build consistency</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">1 Social Account</p>
+                    <p className="text-sm text-white/40">LinkedIn or Twitter/X</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">AI-Generated Content</p>
+                    <p className="text-sm text-white/40">Smart, engaging posts</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">Schedule Posts</p>
+                    <p className="text-sm text-white/40">Set it and (almost) forget it</p>
+                  </div>
+                </div>
+              </div>
+
+              <button className="w-full py-4 px-6 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-bold transition-all hover:scale-[1.02]">
+                Get Started Free
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Pro Plan */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="glass-card p-8 rounded-3xl border-2 border-electric/50 hover:border-electric transition-all relative overflow-hidden group shadow-[0_0_50px_-10px_rgba(0,255,136,0.3)]"
+          >
+            {/* Popular Badge */}
+            <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-to-br from-electric to-cyber rounded-full blur-3xl opacity-30 pointer-events-none" />
+            <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-gradient-to-r from-electric to-cyber text-xs font-bold text-void">
+              🔥 MOST POPULAR
+            </div>
+            
+            <div className="absolute inset-0 bg-gradient-to-br from-electric/5 to-cyber/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-electric to-cyber flex items-center justify-center">
+                  <Crown className="w-6 h-6 text-void" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold">Pro Plan</h3>
+                  <p className="text-white/40 text-sm">For serious growth hackers</p>
+                </div>
+              </div>
+
+              <div className="mb-8">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">Custom</span>
+                </div>
+                <p className="text-white/40 text-sm mt-2">Let&apos;s discuss your needs</p>
+              </div>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <Rocket className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">Unlimited Posts</p>
+                    <p className="text-sm text-white/40">Post as much as you want</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Users className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">Unlimited Accounts</p>
+                    <p className="text-sm text-white/40">Manage multiple brands</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Sparkles className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">AI Image Generation</p>
+                    <p className="text-sm text-white/40">Beautiful visuals included</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">Priority Support</p>
+                    <p className="text-sm text-white/40">We&apos;ve got your back</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">Custom Features</p>
+                    <p className="text-sm text-white/40">Built for your workflow</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <a 
+                  href="https://wa.me/qr/S7LSJDGF4NFTC1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-electric to-cyber hover:shadow-[0_0_40px_-10px_rgba(0,255,136,0.5)] font-bold transition-all hover:scale-[1.02] flex items-center justify-center gap-2 group/btn text-void"
+                >
+                  <MessageCircle className="w-5 h-5 group-hover/btn:rotate-12 transition-transform" />
+                  Contact on WhatsApp
+                </a>
+                
+                <a 
+                  href="mailto:boss.927262@gmail.com"
+                  className="w-full py-3 px-6 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-semibold transition-all hover:scale-[1.02] flex items-center justify-center gap-2 text-sm"
+                >
+                  <Mail className="w-4 h-4" />
+                  boss.927262@gmail.com
+                </a>
+              </div>
+
+              <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-electric/10 to-cyber/10 border border-electric/20">
+                <p className="text-center text-sm">
+                  <span className="font-bold text-electric">🎯 Limited slots available!</span>
+                  <br />
+                  <span className="text-white/60">Join the elite who automate their success</span>
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Trust Badges */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-16 text-center"
+        >
+          <div className="flex items-center justify-center gap-8 flex-wrap text-white/40 text-sm">
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-electric" />
+              <span>No Credit Card Required</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-electric" />
+              <span>Cancel Anytime</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-electric" />
+              <span>Setup in 2 Minutes</span>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
       {/* Reviews Section */}
-      <div className="w-full max-w-7xl mt-12 z-10">
+      <div className="w-full max-w-7xl mt-24 z-10">
         <div className="flex items-end justify-between mb-12 px-4">
           <div>
             <h2 className="text-4xl font-bold mb-2">Community Love</h2>
