@@ -1,0 +1,10 @@
+tmp_rovodev_*
+*.log
+.DS_Store
+.env
+node_modules/
+test/
+tests/
+*.test.js
+.git/
+.github/

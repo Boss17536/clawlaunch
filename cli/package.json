@@ -1,0 +1,35 @@
+{
+  "name": "clawlaunch-cli",
+  "version": "1.0.0",
+  "description": "ClawLaunch CLI - Schedule social media posts safely. Automation that works.",
+  "main": "src/index.js",
+  "bin": {
+    "clawlaunch": "./bin/cli.js",
+    "clawlaunch-daemon": "./bin/daemon.js"
+  },
+  "scripts": {
+    "start": "node bin/cli.js",
+    "daemon": "node bin/daemon.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "clawlaunch",
+    "social-media",
+    "scheduler",
+    "twitter",
+    "linkedin",
+    "automation"
+  ],
+  "author": "ClawLaunch",
+  "license": "MIT",
+  "dependencies": {
+    "node-cron": "^3.0.3",
+    "inquirer": "^8.2.5",
+    "open": "^8.4.2",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -62,8 +62,19 @@ ClawLaunch follows a **Dark-Modern** aesthetic, focusing on:
 ```text
 ClawLaunch/
 ├── app/            # App Router (Pages & Styles)
+├── cli/            # ClawLaunch CLI (Automation Engine)
 ├── components/     # High-Performance UI Components
 └── ...             # Modern Tooling Config
+```
+
+## 🤖 CLI Engine
+
+ClawLaunch includes a powerful CLI for safe social media scheduling.
+
+```bash
+cd cli
+npm install
+npm start
 ```
 
 ## 📝 License
