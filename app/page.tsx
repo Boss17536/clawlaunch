@@ -396,8 +396,8 @@ export default function Home() {
               </div>
 
               <div className="mt-8 p-4 rounded-xl bg-gradient-to-r from-electric/20 to-cyber/20 border border-electric/30 text-center">
-                <p className="text-3xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-1">$2/mo</p>
-                <p className="text-white/60 text-sm font-semibold">⚡ Best Value!</p>
+                <p className="text-2xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-1">Contact Us</p>
+                <p className="text-white/60 text-sm">Let&apos;s discuss pricing for your needs</p>
               </div>
             </div>
           </motion.div>
