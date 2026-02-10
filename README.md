@@ -38,13 +38,13 @@ ClawLaunch isn't just another scheduler. It's a **developer-first CLI tool** des
 Run the initialization wizard to set up your profile and platforms.
 
 ```bash
-npx clawlaunch-cli init
+npm install clawlaunch-cli && clawlaunch init
 ```
 
 You can also specify the platform directly:
 
 ```bash
-npx clawlaunch-cli init --platform=linkedin
+npm install clawlaunch-cli && clawlaunch init --platform=linkedin
 ```
 
 ### 2. Start Scheduling

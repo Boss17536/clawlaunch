@@ -16,10 +16,10 @@ Before you begin, ensure you have the following:
 
 ## 🛠️ Phase 2: Installation
 
-You don't need to install anything globally if you use `npx`. Just run:
+You don't need to install anything globally if you use this command. Just run:
 
 ```bash
-npx clawlaunch-cli init
+npm install clawlaunch-cli && clawlaunch init
 ```
 
 ### What happens during Init?
@@ -42,6 +42,12 @@ To keep the scheduler running in the background:
 
 ```bash
 npx clawlaunch-cli daemon
+```
+
+You can also specify the platform directly:
+
+```bash
+npm install clawlaunch-cli && clawlaunch init --platform=linkedin
 ```
 
 ### 2. The Notification
