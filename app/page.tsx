@@ -278,16 +278,11 @@ export default function Home() {
           <div className="relative z-10">
             <div className="text-center mb-8">
               <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-electric to-cyber flex items-center justify-center">
-                <Crown className="w-10 h-10 text-void" />
+                <MessageCircle className="w-10 h-10 text-void" />
               </div>
-              <h3 className="text-3xl font-bold mb-3">Contact Me</h3>
-              <p className="text-white/60 text-lg mb-2">Get Premium for Only</p>
-              <div className="flex items-baseline justify-center gap-2 mb-4">
-                <span className="text-6xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">$2</span>
-                <span className="text-white/40 text-xl">/per month</span>
-              </div>
-              <p className="text-white/40">
-                Unlimited posts, unlimited accounts, AI images & more!
+              <h3 className="text-4xl font-bold mb-4">Contact Us</h3>
+              <p className="text-white/60 text-lg">
+                Get in touch for premium features, support, or any questions!
               </p>
             </div>
 
