@@ -31,7 +31,7 @@ export default function Home() {
   };
 
   const copyCommand = () => {
-    const command = `npx -y clawlaunch-cli init --platform=${selectedPlatform}`;
+    const command = `npx -y github:Boss17536/clawlaunch init --platform=${selectedPlatform}`;
     navigator.clipboard.writeText(command);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -224,7 +224,7 @@ export default function Home() {
                     </div>
                     <div className="p-6 relative group/terminal">
                       <code className="text-electric font-mono text-sm block">
-                        <span className="text-cyber">~</span> $ npx -y clawlaunch-cli init --platform={selectedPlatform}
+                        <span className="text-cyber">~</span> $ npx -y github:Boss17536/clawlaunch init --platform={selectedPlatform}
                       </code>
                       <button 
                         onClick={copyCommand}

@@ -35,16 +35,16 @@ ClawLaunch isn't just another scheduler. It's a **developer-first CLI tool** des
 
 ### 1. Initialize
 
-You don't need to install anything globally. Just run this one-liner:
+Run the initialization wizard directly from GitHub (installs and runs in one step):
 
 ```bash
-npx -y clawlaunch-cli init
+npx -y github:Boss17536/clawlaunch init
 ```
 
 You can also specify the platform directly:
 
 ```bash
-npx -y clawlaunch-cli init --platform=linkedin
+npx -y github:Boss17536/clawlaunch init --platform=linkedin
 ```
 
 ### 2. Start Scheduling

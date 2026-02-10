@@ -2,6 +2,9 @@
   "name": "clawlaunch",
   "version": "0.1.0",
   "private": true,
+  "bin": {
+    "clawlaunch": "./cli/bin/cli.js"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,7 +16,12 @@
     "lucide-react": "^0.344.0",
     "next": "^14.2.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "node-cron": "^3.0.3",
+    "inquirer": "^8.2.5",
+    "open": "^8.4.2",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

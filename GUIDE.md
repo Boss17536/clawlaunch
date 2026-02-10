@@ -16,10 +16,10 @@ Before you begin, ensure you have the following:
 
 ## 🛠️ Phase 2: Installation
 
-You don't need to install anything globally. Just run:
+You don't need to install anything globally. Just run this one-liner from GitHub:
 
 ```bash
-npx -y clawlaunch-cli init
+npx -y github:Boss17536/clawlaunch init
 ```
 
 ### What happens during Init?
@@ -47,7 +47,7 @@ npx clawlaunch-cli daemon
 You can also specify the platform directly:
 
 ```bash
-npx -y clawlaunch-cli init --platform=linkedin
+npx -y github:Boss17536/clawlaunch init --platform=linkedin
 ```
 
 ### 2. The Notification
@@ -99,5 +99,6 @@ High-quality images can take up to 30 seconds to generate. Be patient!
 ---
 
 <div align="center">
-  <p>Ready to launch? Run <code>npx -y clawlaunch-cli init</code> now!</p>
+  <p>Ready to launch? Run <code>npx -y github:Boss17536/clawlaunch init</code> now!</p>
+  <p>Visit us at <a href="https://clawlaunch.linkpc.net">clawlaunch.linkpc.net</a></p>
 </div>
