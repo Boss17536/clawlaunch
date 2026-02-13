@@ -89,29 +89,40 @@ function startScheduler(config) {
     return false;
   }
   
-  const { platform, topic, postsPerWeek, postingTime } = config;
+  const { platform, topic, postsPerWeek, postingTime, postingTimes } = config;
+  
+  // Support both old (postingTime) and new (postingTimes) format
+  const timesArray = postingTimes 
+    ? postingTimes.split(',').map(t => t.trim()) 
+    : [postingTime];
   
   try {
-    const { hour, minute } = parseTime(postingTime);
     const days = calculatePostDays(postsPerWeek);
-    
-    // Cron format: minute hour day-of-month month day-of-week
-    const cronExpression = `${minute} ${hour} * * ${days}`;
     
     console.log(chalk.cyan('⏰ Scheduler Configuration:'));
     console.log(chalk.gray(`   Platform: ${platform}`));
     console.log(chalk.gray(`   Topic: ${topic}`));
-    console.log(chalk.gray(`   Schedule: ${postsPerWeek} posts/week at ${postingTime}`));
-    console.log(chalk.gray(`   Cron: ${cronExpression}`));
+    console.log(chalk.gray(`   Schedule: ${postsPerWeek} posts/week at ${timesArray.join(', ')}`));
     console.log('');
     
-    // Validate cron expression
-    if (!cron.validate(cronExpression)) {
-      throw new Error('Invalid cron expression generated');
-    }
+    const scheduledTasks = [];
     
-    // Schedule the task
-    scheduledTask = cron.schedule(cronExpression, async () => {
+    // Create a scheduled task for each time
+    for (const time of timesArray) {
+      const { hour, minute } = parseTime(time);
+      
+      // Cron format: minute hour day-of-month month day-of-week
+      const cronExpression = `${minute} ${hour} * * ${days}`;
+      
+      console.log(chalk.gray(`   Cron for ${time}: ${cronExpression}`));
+      
+      // Validate cron expression
+      if (!cron.validate(cronExpression)) {
+        throw new Error(`Invalid cron expression generated for time ${time}`);
+      }
+      
+      // Schedule the task
+      const task = cron.schedule(cronExpression, async () => {
       console.log(chalk.yellow('\n⏰ Scheduled post time reached!'));
       logger.info('Scheduled post triggered', { platform, topic });
       
@@ -181,10 +192,17 @@ function startScheduler(config) {
         console.log(chalk.red(`❌ Error: ${result.error}`));
         logger.error('Failed to open browser', { error: result.error });
       }
-    }, {
-      timezone: config.timezone || 'America/New_York'
-    });
+      }, {
+        timezone: config.timezone || 'America/New_York'
+      });
+      
+      scheduledTasks.push(task);
+    }
     
+    // Store all tasks globally (overwrite scheduledTask to array)
+    scheduledTask = scheduledTasks;
+    
+    console.log('');
     console.log(chalk.green('✅ Scheduler started successfully!'));
     console.log(chalk.yellow('⚠️  Keep this terminal open for scheduler to run'));
     console.log(chalk.gray('   Press Ctrl+C to stop\n'));
@@ -221,7 +239,13 @@ function startScheduler(config) {
  */
 function stopScheduler() {
   if (scheduledTask) {
-    scheduledTask.stop();
+    if (Array.isArray(scheduledTask)) {
+      // Stop all tasks
+      scheduledTask.forEach(task => task.stop());
+    } else {
+      // Stop single task (backward compatibility)
+      scheduledTask.stop();
+    }
     scheduledTask = null;
     console.log(chalk.yellow('⏸️  Scheduler stopped'));
     return true;

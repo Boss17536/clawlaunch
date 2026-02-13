@@ -172,7 +172,12 @@ async function generateCustomContent(prompt, apiKey, length = 'short') {
  * @returns {string|Promise<string>} - Random template text or Promise for custom_api
  */
 function getRandomTemplate(topic, length = 'short', config = {}) {
-  // Handle custom API content generation
+  // Handle custom API content generation (if useCustomApi is enabled and API key provided)
+  if (config.useCustomApi && config.customApiKey && config.customPrompt) {
+    return generateCustomContent(config.customPrompt, config.customApiKey, length);
+  }
+  
+  // Backward compatibility: support old custom_api topic
   if (topic === 'custom_api' && config.customPrompt && config.customApiKey) {
     return generateCustomContent(config.customPrompt, config.customApiKey, length);
   }

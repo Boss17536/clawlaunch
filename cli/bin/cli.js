@@ -73,9 +73,14 @@ async function setupWizard() {
         { name: '💪 Fitness - Health & workout tips', value: 'fitness' },
         { name: '💻 Tech - Technology insights', value: 'tech' },
         { name: '📈 Business - Entrepreneurship tips', value: 'business' },
-        { name: '🔑 Use API Key - Custom AI-generated content', value: 'custom_api' },
         { name: '✨ Default - General tips', value: 'default' }
       ]
+    },
+    {
+      type: 'confirm',
+      name: 'useCustomApi',
+      message: '🔑 Do you want to use your own API key for AI-generated content?',
+      default: false
     },
     {
       type: 'list',
@@ -100,17 +105,21 @@ async function setupWizard() {
     },
     {
       type: 'input',
-      name: 'postingTime',
-      message: '5️⃣  What time should posts go out? (e.g., "9:00 AM", "9:00 am", "9:30 PM" or "14:30")',
+      name: 'postingTimes',
+      message: '5️⃣  What time(s) should posts go out? (comma-separated, e.g., "4:30 AM, 4:30 PM" or "9:00 AM")',
       default: '9:00 AM',
       validate: (input) => {
         const trimmed = input.trim();
-        // Support formats: 9:00 AM, 9:00 am, 9:00 Am, 9:00AM, 9:00am, 14:30
+        const times = trimmed.split(',').map(t => t.trim());
         const pattern = /^(\d{1,2}):(\d{2})\s*(AM|PM|am|pm|Am|Pm|aM|pM)?$/;
-        if (pattern.test(trimmed)) {
-          return true;
+        
+        for (const time of times) {
+          if (!pattern.test(time)) {
+            return `Invalid time format: "${time}". Use format "9:00 AM", "9:30 PM" or "14:30"`;
+          }
         }
-        return 'Please use format "9:00 AM", "9:30 pm" or "14:30"';
+        
+        return true;
       }
     },
     {
@@ -137,8 +146,8 @@ async function setupWizard() {
     }
   ]);
 
-  // If custom_api topic is selected, ask for API key and custom prompt
-  if (answers.topic === 'custom_api') {
+  // If useCustomApi is selected, ask for API key and custom prompt
+  if (answers.useCustomApi) {
     const { loadPromptHistory, savePromptHistory } = require('../src/config');
     const promptHistory = loadPromptHistory();
     
