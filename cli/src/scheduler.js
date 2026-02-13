@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const { loadConfig, checkLimit, checkDailyLimit, checkSchedulerDays, incrementCounter, incrementDailyCounter, resetSchedulerDays } = require('./config');
 const { openPostInBrowser } = require('./browser');
 const logger = require('./logger');
+const { canPost, recordPost, getUpgradeInfo, getUsageStats, isPro } = require('./license');
 
 let scheduledTask = null;
 
@@ -114,36 +115,41 @@ function startScheduler(config) {
       console.log(chalk.yellow('\n⏰ Scheduled post time reached!'));
       logger.info('Scheduled post triggered', { platform, topic });
       
-      // Check scheduler days limit (5 days max, reconfigure on 6th day)
-      const schedulerCheck = checkSchedulerDays();
-      if (schedulerCheck.needsReconfigure) {
-        console.log(chalk.red('❌ Scheduler period ended (5 days used)'));
-        console.log(chalk.yellow('⚠️  You need to reconfigure the scheduler for the next 5 days'));
-        console.log(chalk.gray('   Run the setup again to continue posting'));
-        logger.warn('Scheduler reconfiguration needed');
+      // Check license and limits
+      const postCheck = canPost();
+      
+      if (!postCheck.allowed) {
+        const upgradeInfo = getUpgradeInfo();
+        const stats = postCheck.stats;
+        
+        console.log(chalk.red('\n❌ Limit Reached!'));
+        console.log(chalk.yellow(`   ${postCheck.message}`));
+        console.log('');
+        console.log(chalk.cyan('📊 Your Usage:'));
+        console.log(chalk.gray(`   Today: ${stats.dailyCount}/1 post`));
+        console.log(chalk.gray(`   This Month: ${stats.monthlyCount}/10 posts`));
+        console.log(chalk.gray(`   Total: ${stats.totalPosts} posts`));
+        console.log('');
+        console.log(chalk.bold.green('🚀 Upgrade to ClawLaunch Pro for:'));
+        upgradeInfo.features.pro.forEach(feature => {
+          console.log(chalk.green(`   ✅ ${feature}`));
+        });
+        console.log('');
+        console.log(chalk.bold.yellow('📞 Contact us to upgrade:'));
+        console.log(chalk.white(`   📱 WhatsApp: ${upgradeInfo.contact.whatsapp}`));
+        console.log(chalk.white(`   📧 Email: ${upgradeInfo.contact.email}`));
+        console.log(chalk.cyan(`   🔗 Quick WhatsApp: ${upgradeInfo.contact.whatsappLink}`));
+        console.log('');
+        logger.warn('Post limit reached', { reason: postCheck.reason, stats });
         return;
       }
       
-      // Check daily limit (1 post per day)
-      const dailyLimit = checkDailyLimit();
-      console.log(chalk.gray(`   Daily posts used: ${dailyLimit.current}/${dailyLimit.total}`));
-      
-      if (!dailyLimit.allowed) {
-        console.log(chalk.red('❌ Daily limit reached (1 post per day)'));
-        console.log(chalk.yellow('   Try again tomorrow!'));
-        logger.warn('Daily limit reached');
-        return;
-      }
-      
-      // Check monthly limit
-      const limit = checkLimit();
-      console.log(chalk.gray(`   Monthly posts used: ${limit.current}/${limit.total}`));
-      
-      if (!limit.allowed) {
-        console.log(chalk.red('❌ Free tier limit reached (20 posts/month)'));
-        console.log(chalk.yellow('   Limit resets on the 1st of next month'));
-        logger.warn('Monthly limit reached');
-        return;
+      // If PRO, show status
+      if (postCheck.isPro) {
+        console.log(chalk.green('✅ PRO License Active - No limits!'));
+      } else {
+        console.log(chalk.gray(`   Daily posts used: ${postCheck.stats.dailyCount}/1`));
+        console.log(chalk.gray(`   Monthly posts used: ${postCheck.stats.monthlyCount}/10`));
       }
       
       // Open browser with post
@@ -162,23 +168,18 @@ function startScheduler(config) {
         }
         console.log(chalk.bold.yellow('\n👆 Click "Post" in the browser to publish'));
         
-        // Increment daily counter ONLY on success
-        if (incrementDailyCounter()) {
-          const newDailyLimit = checkDailyLimit();
-          console.log(chalk.gray(`   Daily posts remaining: ${newDailyLimit.remaining}/${newDailyLimit.total}`));
-          logger.success('Daily counter incremented', { remaining: newDailyLimit.remaining });
-        }
-        
-        // Increment monthly counter ONLY on success
-        if (incrementCounter()) {
-          const newLimit = checkLimit();
-          console.log(chalk.gray(`   Monthly posts remaining: ${newLimit.remaining}/${newLimit.total}\n`));
-          logger.success('Monthly counter incremented', { remaining: newLimit.remaining });
+        // Record post in license system
+        if (recordPost()) {
+          const stats = getUsageStats();
+          if (!isPro()) {
+            console.log(chalk.gray(`   Daily posts remaining: ${1 - stats.dailyCount}/1`));
+            console.log(chalk.gray(`   Monthly posts remaining: ${10 - stats.monthlyCount}/10\n`));
+          }
+          logger.success('Post recorded', { stats });
         }
       } else {
         console.log(chalk.red(`❌ Error: ${result.error}`));
         logger.error('Failed to open browser', { error: result.error });
-        // Counters are NOT incremented on failure
       }
     }, {
       timezone: config.timezone || 'America/New_York'
@@ -188,20 +189,25 @@ function startScheduler(config) {
     console.log(chalk.yellow('⚠️  Keep this terminal open for scheduler to run'));
     console.log(chalk.gray('   Press Ctrl+C to stop\n'));
     
-    // Show scheduler days info
-    const schedulerCheck = checkSchedulerDays();
-    console.log(chalk.cyan(`📅 Scheduler Days: Day ${schedulerCheck.daysUsed + 1} of 5`));
-    console.log(chalk.gray(`   ${5 - schedulerCheck.daysUsed} days remaining before reconfiguration needed\n`));
-    
-    // Show daily limit info
-    const dailyLimit = checkDailyLimit();
-    console.log(chalk.cyan(`📊 Daily Usage: ${dailyLimit.current}/${dailyLimit.total} post used today`));
-    console.log(chalk.gray(`   ${dailyLimit.remaining} post remaining today\n`));
-    
-    // Show monthly limit info
-    const limit = checkLimit();
-    console.log(chalk.cyan(`📊 Monthly Usage: ${limit.current}/${limit.total} posts used`));
-    console.log(chalk.gray(`   ${limit.remaining} posts remaining this month\n`));
+    // Show license status
+    if (isPro()) {
+      console.log(chalk.green('💎 PRO License Active - Unlimited Posts!\n'));
+    } else {
+      const stats = getUsageStats();
+      console.log(chalk.cyan('📊 FREE Tier Usage:'));
+      console.log(chalk.gray(`   Today: ${stats.dailyCount}/1 post used`));
+      console.log(chalk.gray(`   This Month: ${stats.monthlyCount}/10 posts used`));
+      console.log(chalk.gray(`   Remaining Today: ${1 - stats.dailyCount}`));
+      console.log(chalk.gray(`   Remaining This Month: ${10 - stats.monthlyCount}\n`));
+      
+      if (stats.monthlyCount >= 8 || stats.dailyCount >= 1) {
+        const upgradeInfo = getUpgradeInfo();
+        console.log(chalk.yellow('⚠️  Getting close to your limit!'));
+        console.log(chalk.cyan('   Upgrade to Pro for unlimited posts:'));
+        console.log(chalk.white(`   📱 WhatsApp: ${upgradeInfo.contact.whatsapp}`));
+        console.log(chalk.white(`   📧 Email: ${upgradeInfo.contact.email}\n`));
+      }
+    }
     
     return true;
   } catch (error) {
@@ -236,17 +242,34 @@ async function testPost() {
   
   console.log(chalk.cyan('🧪 Testing post (opens browser immediately)...\n'));
   
-  const limit = checkLimit();
-  console.log(chalk.gray(`Posts used: ${limit.current}/${limit.total}`));
+  // Check license
+  const postCheck = canPost();
   
-  if (!limit.allowed) {
-    console.log(chalk.red('❌ Monthly limit reached'));
+  if (!postCheck.allowed) {
+    const upgradeInfo = getUpgradeInfo();
+    const stats = postCheck.stats;
+    
+    console.log(chalk.red('❌ Limit Reached!'));
+    console.log(chalk.yellow(`   ${postCheck.message}\n`));
+    console.log(chalk.cyan('📊 Your Usage:'));
+    console.log(chalk.gray(`   Today: ${stats.dailyCount}/1 post`));
+    console.log(chalk.gray(`   This Month: ${stats.monthlyCount}/10 posts\n`));
+    console.log(chalk.bold.yellow('📞 Contact us to upgrade to Pro:'));
+    console.log(chalk.white(`   📱 WhatsApp: ${upgradeInfo.contact.whatsapp}`));
+    console.log(chalk.white(`   📧 Email: ${upgradeInfo.contact.email}`));
+    console.log(chalk.cyan(`   🔗 ${upgradeInfo.contact.whatsappLink}\n`));
     return false;
+  }
+  
+  if (!postCheck.isPro) {
+    const stats = postCheck.stats;
+    console.log(chalk.gray(`Posts used today: ${stats.dailyCount}/1`));
+    console.log(chalk.gray(`Posts used this month: ${stats.monthlyCount}/10\n`));
   }
   
   // Show preview first
   const { getPostPreview } = require('./browser');
-  const preview = getPostPreview(config.platform, config.topic, config);
+  const preview = await getPostPreview(config.platform, config.topic, config);
   
   console.log(chalk.cyan('📋 Post Preview:'));
   console.log(chalk.white(`   Platform: ${preview.platform}`));

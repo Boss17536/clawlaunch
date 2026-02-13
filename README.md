@@ -33,50 +33,39 @@ ClawLaunch isn't just another scheduler. It's a **developer-first CLI tool** des
 
 ## 🚀 Quick Start
 
-### Option 1: Quick Try (No Installation)
-
-Run directly from GitHub with npx:
+### Install with npm (Recommended)
 
 ```bash
-npx -y github:Boss17536/clawlaunch init
+npm install -g clawlaunch-cli
 ```
 
-Or specify your platform directly:
+That's it! Now run:
 
 ```bash
-npx -y github:Boss17536/clawlaunch init --platform=linkedin
+clawlaunch init
+clawlaunch start
 ```
 
-### Option 2: Install Globally (Recommended)
+### Alternative: Install from Source
 
-Install once and use the `clawlaunch` command anywhere:
+For contributors or to run the latest dev version:
 
 ```bash
-# Clone and install
 git clone https://github.com/Boss17536/clawlaunch.git
-cd clawlaunch
+cd clawlaunch/cli
 npm install
 npm link
 
 # Now use it anywhere!
 clawlaunch init
 clawlaunch start
-clawlaunch test
-clawlaunch status
-```
-
-### Option 3: Install via npm (Coming Soon)
-
-```bash
-npm install -g clawlaunch
-clawlaunch init
 ```
 
 ---
 
 ## 📖 Commands
 
-Once installed globally with `npm link`, you can use these simple commands:
+After installing with `npm install -g clawlaunch-cli`, use these commands:
 
 ### Initialize Setup
 ```bash

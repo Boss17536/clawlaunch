@@ -5,6 +5,7 @@ const crypto = require('crypto');
 
 const CONFIG_DIR = path.join(os.homedir(), '.social-poster');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+const PROMPT_HISTORY_FILE = path.join(CONFIG_DIR, 'prompt_history.json');
 
 // Encryption settings
 const ALGORITHM = 'aes-256-cbc';
@@ -79,9 +80,12 @@ function saveConfig(config) {
     }
   };
   
-  // Encrypt sensitive API key before saving
+  // Encrypt sensitive API keys before saving
   if (configData.aiImageApiKey) {
     configData.aiImageApiKey = encrypt(configData.aiImageApiKey);
+  }
+  if (configData.customApiKey) {
+    configData.customApiKey = encrypt(configData.customApiKey);
   }
   
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(configData, null, 2));
@@ -101,9 +105,12 @@ function loadConfig() {
     const data = fs.readFileSync(CONFIG_FILE, 'utf8');
     const config = JSON.parse(data);
     
-    // Decrypt sensitive API key
+    // Decrypt sensitive API keys
     if (config.aiImageApiKey) {
       config.aiImageApiKey = decrypt(config.aiImageApiKey);
+    }
+    if (config.customApiKey) {
+      config.customApiKey = decrypt(config.customApiKey);
     }
     
     // Initialize new fields if they don't exist
@@ -150,6 +157,9 @@ function loadConfig() {
       const configToSave = { ...config };
       if (configToSave.aiImageApiKey) {
         configToSave.aiImageApiKey = encrypt(configToSave.aiImageApiKey);
+      }
+      if (configToSave.customApiKey) {
+        configToSave.customApiKey = encrypt(configToSave.customApiKey);
       }
       fs.writeFileSync(CONFIG_FILE, JSON.stringify(configToSave, null, 2));
     }
@@ -254,10 +264,13 @@ function incrementDailyCounter() {
   
   config.dailyCounter.count += 1;
   
-  // Re-encrypt API key before saving
+  // Re-encrypt API keys before saving
   const configToSave = { ...config };
   if (configToSave.aiImageApiKey) {
     configToSave.aiImageApiKey = encrypt(configToSave.aiImageApiKey);
+  }
+  if (configToSave.customApiKey) {
+    configToSave.customApiKey = encrypt(configToSave.customApiKey);
   }
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(configToSave, null, 2));
   
@@ -284,10 +297,13 @@ function incrementCounter() {
   
   config.monthlyCounter.count += 1;
   
-  // Re-encrypt API key before saving
+  // Re-encrypt API keys before saving
   const configToSave = { ...config };
   if (configToSave.aiImageApiKey) {
     configToSave.aiImageApiKey = encrypt(configToSave.aiImageApiKey);
+  }
+  if (configToSave.customApiKey) {
+    configToSave.customApiKey = encrypt(configToSave.customApiKey);
   }
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(configToSave, null, 2));
   
@@ -310,10 +326,13 @@ function resetSchedulerDays() {
     daysUsed: 0
   };
   
-  // Re-encrypt API key before saving
+  // Re-encrypt API keys before saving
   const configToSave = { ...config };
   if (configToSave.aiImageApiKey) {
     configToSave.aiImageApiKey = encrypt(configToSave.aiImageApiKey);
+  }
+  if (configToSave.customApiKey) {
+    configToSave.customApiKey = encrypt(configToSave.customApiKey);
   }
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(configToSave, null, 2));
   
@@ -338,6 +357,56 @@ function getConfigPath() {
   return CONFIG_FILE;
 }
 
+/**
+ * Load prompt history (encrypted storage for prompts only, NO API keys)
+ * @returns {Array} - Array of previous prompts
+ */
+function loadPromptHistory() {
+  if (!fs.existsSync(PROMPT_HISTORY_FILE)) {
+    return [];
+  }
+  
+  try {
+    const data = fs.readFileSync(PROMPT_HISTORY_FILE, 'utf8');
+    const history = JSON.parse(data);
+    
+    // Decrypt each prompt
+    return history.map(encrypted => decrypt(encrypted)).filter(p => p);
+  } catch (error) {
+    console.error('Error loading prompt history:', error.message);
+    return [];
+  }
+}
+
+/**
+ * Save prompt to history (encrypted, max 10 prompts)
+ * SECURITY: Only prompts are stored, NO API keys
+ * @param {string} prompt - The prompt to save
+ */
+function savePromptHistory(prompt) {
+  if (!prompt || prompt.trim().length === 0) {
+    return;
+  }
+  
+  ensureConfigDir();
+  
+  let history = loadPromptHistory();
+  
+  // Remove duplicates
+  history = history.filter(p => p !== prompt);
+  
+  // Add to beginning
+  history.unshift(prompt);
+  
+  // Keep only last 10
+  history = history.slice(0, 10);
+  
+  // Encrypt before saving
+  const encryptedHistory = history.map(p => encrypt(p));
+  
+  fs.writeFileSync(PROMPT_HISTORY_FILE, JSON.stringify(encryptedHistory, null, 2));
+}
+
 module.exports = {
   saveConfig,
   loadConfig,
@@ -348,5 +417,7 @@ module.exports = {
   incrementDailyCounter,
   resetSchedulerDays,
   deleteConfig,
-  getConfigPath
+  getConfigPath,
+  loadPromptHistory,
+  savePromptHistory
 };

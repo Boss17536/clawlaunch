@@ -12,36 +12,31 @@ A Node.js CLI tool that safely schedules social media posts by opening a browser
 
 ## 📦 Installation
 
+**For Users (Recommended):**
 ```bash
-# From within the repository
-cd cli
+npm install -g clawlaunch-cli
+```
+
+**For Developers:**
+```bash
+# Clone and install
+git clone https://github.com/Boss17536/clawlaunch.git
+cd clawlaunch/cli
 npm install
 npm link
 ```
 
 ## 🎯 Quick Start
 
-### Option 1: One-Time Use (No Installation)
-```bash
-npx -y github:Boss17536/clawlaunch init
-npx github:Boss17536/clawlaunch start
-```
+After installing with `npm install -g clawlaunch-cli`, simply run:
 
-### Option 2: Install Globally (Use `clawlaunch` Command)
 ```bash
-# Clone and install
-git clone https://github.com/Boss17536/clawlaunch.git
-cd clawlaunch
-npm install
-npm link
-
-# Now use simple commands!
 clawlaunch init
-clawlaunch start
 ```
+
+That's it! Follow the 7 simple questions and start scheduling posts.
 
 ### Available Commands:
-After global installation with `npm link`, use these commands:
 
 - `clawlaunch` or `clawlaunch init` - Run setup wizard
 - `clawlaunch start` - Start the scheduler
@@ -49,12 +44,6 @@ After global installation with `npm link`, use these commands:
 - `clawlaunch test` - Test a post immediately
 - `clawlaunch status` - View configuration and limits
 - `clawlaunch help` - Show all commands
-
-**Without global install**, prefix with npx:
-```bash
-npx github:Boss17536/clawlaunch init
-npx github:Boss17536/clawlaunch start
-```
 
 ### Setup Questions (7 simple steps):
 1. Platform (Twitter/X or LinkedIn)

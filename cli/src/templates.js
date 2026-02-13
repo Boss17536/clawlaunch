@@ -91,13 +91,92 @@ const templates = {
 };
 
 /**
+ * Generate content using OpenAI API
+ * @param {string} prompt - User's custom prompt
+ * @param {string} apiKey - OpenAI API key
+ * @param {string} length - Post length ('short' or 'long')
+ * @returns {Promise<string>} - Generated content
+ */
+async function generateCustomContent(prompt, apiKey, length = 'short') {
+  const https = require('https');
+  
+  const maxTokens = length === 'long' ? 300 : 100;
+  const systemPrompt = length === 'long' 
+    ? 'You are a professional social media content creator. Create engaging, detailed posts with multiple paragraphs. Use emojis where appropriate.'
+    : 'You are a professional social media content creator. Create short, punchy, engaging posts. Use emojis where appropriate.';
+  
+  const postData = JSON.stringify({
+    model: 'gpt-3.5-turbo',
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: prompt }
+    ],
+    max_tokens: maxTokens,
+    temperature: 0.8
+  });
+  
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.openai.com',
+      path: '/v1/chat/completions',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Length': postData.length
+      }
+    };
+    
+    const req = https.request(options, (res) => {
+      let data = '';
+      
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      
+      res.on('end', () => {
+        try {
+          const response = JSON.parse(data);
+          
+          if (response.error) {
+            reject(new Error(response.error.message || 'OpenAI API error'));
+            return;
+          }
+          
+          if (response.choices && response.choices.length > 0) {
+            const content = response.choices[0].message.content.trim();
+            resolve(content);
+          } else {
+            reject(new Error('No content generated'));
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+    
+    req.on('error', (error) => {
+      reject(error);
+    });
+    
+    req.write(postData);
+    req.end();
+  });
+}
+
+/**
  * Get a random template for a given topic and length
  * @param {string} topic - Topic name (motivation, fitness, tech, business, default)
  * @param {string} length - Post length ('short' or 'long'), defaults to 'short'
  * @param {Object} config - Optional config with custom templates
- * @returns {string} - Random template text
+ * @returns {string|Promise<string>} - Random template text or Promise for custom_api
  */
 function getRandomTemplate(topic, length = 'short', config = {}) {
+  // Handle custom API content generation
+  if (topic === 'custom_api' && config.customPrompt && config.customApiKey) {
+    return generateCustomContent(config.customPrompt, config.customApiKey, length);
+  }
+  
   // Check if config has custom templates
   let topicTemplates = templates[topic] || templates.default;
   

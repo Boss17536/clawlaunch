@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import { useClickSound } from "./SoundEffect";
+import GoogleAuth from "./GoogleAuth";
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -62,17 +63,20 @@ export default function Navigation() {
           })}
         </div>
         
-        {/* CTA Button */}
-        <Link href="/">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={playClick}
-            className="px-4 py-2 bg-gradient-to-r from-electric to-cyber rounded-lg font-semibold text-sm glow-green"
-          >
-            Get Started
-          </motion.button>
-        </Link>
+        {/* Auth & CTA */}
+        <div className="flex items-center gap-3">
+          <GoogleAuth />
+          <Link href="/">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={playClick}
+              className="px-4 py-2 bg-gradient-to-r from-electric to-cyber rounded-lg font-semibold text-sm glow-green"
+            >
+              Get Started
+            </motion.button>
+          </Link>
+        </div>
       </div>
     </motion.nav>
   );

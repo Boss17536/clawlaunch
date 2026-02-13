@@ -3,6 +3,7 @@
 import { ArrowRight, LayoutGrid, Star, Terminal, Check, Copy, Zap, Crown, Users, MessageCircle, Mail, Sparkles, Rocket } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { logButtonClick, logConversion } from "@/lib/firebase";
 
 export default function Home() {
   const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
@@ -27,14 +28,20 @@ export default function Home() {
   const handleSaveConfiguration = () => {
     if (selectedPlatform) {
       setShowCommand(true);
+      // Track configuration save event
+      logButtonClick('save_configuration', 'hero_section');
+      logConversion('configuration_created', 1);
     }
   };
 
   const copyCommand = () => {
-    const command = `npx -y github:Boss17536/clawlaunch init --platform=${selectedPlatform}`;
+    const command = `npm install -g clawlaunch-cli && clawlaunch init --platform=${selectedPlatform}`;
     navigator.clipboard.writeText(command);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    // Track command copy event
+    logButtonClick('copy_install_command', 'hero_section');
+    logConversion('install_command_copied', 1);
   };
 
   const reviews = [
@@ -141,9 +148,46 @@ export default function Home() {
               <p className="text-white/50">Select your target platform to generate your config</p>
             </div>
             
+            {/* CLI Commands Help Guide */}
+            <div className="mb-8 p-6 rounded-xl bg-gradient-to-r from-electric/5 to-cyber/5 border border-electric/20 relative z-10">
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                <Terminal className="w-5 h-5 text-electric" />
+                Available Commands
+              </h3>
+              <div className="grid md:grid-cols-2 gap-3 text-sm">
+                <div className="flex items-start gap-3">
+                  <code className="px-2 py-1 rounded bg-white/10 text-electric font-mono text-xs">clawlaunch init</code>
+                  <span className="text-white/60">Setup wizard</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <code className="px-2 py-1 rounded bg-white/10 text-electric font-mono text-xs">clawlaunch start</code>
+                  <span className="text-white/60">Start scheduler</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <code className="px-2 py-1 rounded bg-white/10 text-electric font-mono text-xs">clawlaunch test</code>
+                  <span className="text-white/60">Test a post now</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <code className="px-2 py-1 rounded bg-white/10 text-electric font-mono text-xs">clawlaunch status</code>
+                  <span className="text-white/60">View config & limits</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <code className="px-2 py-1 rounded bg-white/10 text-electric font-mono text-xs">clawlaunch help</code>
+                  <span className="text-white/60">Show all commands</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <code className="px-2 py-1 rounded bg-white/10 text-electric font-mono text-xs">clawlaunch daemon</code>
+                  <span className="text-white/60">Run in background</span>
+                </div>
+              </div>
+            </div>
+            
             <div className="grid md:grid-cols-2 gap-6 mb-10 relative z-10">
               <button
-                onClick={() => setSelectedPlatform("linkedin")}
+                onClick={() => {
+                  setSelectedPlatform("linkedin");
+                  logButtonClick('select_platform_linkedin', 'platform_selection');
+                }}
                 className={`relative z-20 group p-6 rounded-2xl border transition-all duration-300 text-left hover:-translate-y-1 ${
                   selectedPlatform === "linkedin" 
                     ? "border-electric bg-electric/10 shadow-[0_0_30px_-5px_rgba(74,222,128,0.2)]" 
@@ -167,7 +211,10 @@ export default function Home() {
               </button>
 
               <button
-                onClick={() => setSelectedPlatform("x")}
+                onClick={() => {
+                  setSelectedPlatform("x");
+                  logButtonClick('select_platform_x', 'platform_selection');
+                }}
                 className={`relative z-20 group p-6 rounded-2xl border transition-all duration-300 text-left hover:-translate-y-1 ${
                   selectedPlatform === "x" 
                     ? "border-electric bg-electric/10 shadow-[0_0_30px_-5px_rgba(74,222,128,0.2)]" 
@@ -224,7 +271,10 @@ export default function Home() {
                     </div>
                     <div className="p-6 relative group/terminal">
                       <code className="text-electric font-mono text-sm block">
-                        <span className="text-cyber">~</span> $ npx -y github:Boss17536/clawlaunch init --platform={selectedPlatform}
+                        <span className="text-cyber">~</span> $ npm install -g clawlaunch-cli
+                      </code>
+                      <code className="text-electric font-mono text-sm block mt-2">
+                        <span className="text-cyber">~</span> $ clawlaunch init --platform={selectedPlatform}
                       </code>
                       <button 
                         onClick={copyCommand}
@@ -236,7 +286,7 @@ export default function Home() {
                     </div>
                   </div>
                   <p className="mt-3 text-center text-xs text-white/30">
-                    Paste this into your terminal to analyze your repo and set up the CLI
+                    Install once, use everywhere. Simple & fast setup!
                   </p>
                 </motion.div>
               )}
@@ -290,14 +340,14 @@ export default function Home() {
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-lg">20 Posts per Month</p>
-                    <p className="text-sm text-white/40">Build consistency without pressure</p>
+                    <p className="font-semibold text-lg">1 Post per Day</p>
+                    <p className="text-sm text-white/40">10 posts per month</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-electric flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-lg">1 Account Only</p>
+                    <p className="font-semibold text-lg">1 Social Account</p>
                     <p className="text-sm text-white/40">LinkedIn OR Twitter/X</p>
                   </div>
                 </div>
@@ -396,8 +446,8 @@ export default function Home() {
               </div>
 
               <div className="mt-8 p-4 rounded-xl bg-gradient-to-r from-electric/20 to-cyber/20 border border-electric/30 text-center">
-                <p className="text-2xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-1">Contact Us</p>
-                <p className="text-white/60 text-sm">Let&apos;s discuss pricing for your needs</p>
+                <p className="text-2xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-1">Contact for Pricing</p>
+                <p className="text-white/60 text-sm">Negotiate the best deal for your needs</p>
               </div>
             </div>
           </motion.div>
@@ -417,10 +467,10 @@ export default function Home() {
             <span className="text-sm font-semibold text-electric">Want Premium Features?</span>
           </motion.div>
           <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-electric to-cyber bg-clip-text text-transparent">
-            Let&apos;s Talk Growth
+            Ready to Upgrade?
           </h2>
           <p className="text-white/50 text-lg max-w-2xl mx-auto">
-            Unlock unlimited posts, multiple accounts, and premium features for just $2/month 🚀
+            Contact us to unlock unlimited posts, multiple accounts, and premium features 🚀
           </p>
         </div>
 
@@ -439,21 +489,21 @@ export default function Home() {
               <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-electric to-cyber flex items-center justify-center">
                 <MessageCircle className="w-10 h-10 text-void" />
               </div>
-              <h3 className="text-4xl font-bold mb-4">Contact Us</h3>
+              <h3 className="text-4xl font-bold mb-4">Get Your Pro License</h3>
               <p className="text-white/60 text-lg">
-                Get in touch for premium features, support, or any questions!
+                Contact us to discuss pricing and get your premium license today!
               </p>
             </div>
 
             <div className="space-y-4 mb-8">
               <a 
-                href="https://wa.me/qr/S7LSJDGF4NFTC1"
+                href="https://wa.me/917982664789?text=Hi%2C%20I%27m%20interested%20in%20ClawLaunch%20Pro!"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-5 px-8 rounded-xl bg-gradient-to-r from-electric to-cyber hover:shadow-[0_0_50px_-10px_rgba(0,255,136,0.6)] font-bold text-lg transition-all hover:scale-[1.03] flex items-center justify-center gap-3 group/btn text-void"
               >
                 <MessageCircle className="w-6 h-6 group-hover/btn:rotate-12 transition-transform" />
-                Message on WhatsApp
+                Contact on WhatsApp
               </a>
               
               <div className="relative">
@@ -476,8 +526,8 @@ export default function Home() {
 
             <div className="p-5 rounded-xl bg-gradient-to-r from-electric/10 to-cyber/10 border border-electric/20">
               <p className="text-center">
-                <span className="block font-bold text-electric text-lg mb-1">🎯 Limited Spots Available!</span>
-                <span className="text-white/70 text-sm">Join the elite who are automating their social media success</span>
+                <span className="block font-bold text-electric text-lg mb-1">💬 Fast Response Guaranteed</span>
+                <span className="text-white/70 text-sm">We&apos;ll get back to you within 24 hours with a custom quote</span>
               </p>
             </div>
           </div>
@@ -502,6 +552,254 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <Check className="w-4 h-4 text-electric" />
               <span>Setup in Minutes</span>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* OpenClaw Integration Section */}
+      <div className="w-full max-w-7xl mt-32 z-10 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="glass-card p-12 rounded-3xl border-2 border-cyber/50 hover:border-cyber transition-all relative overflow-hidden group shadow-[0_0_50px_-10px_rgba(139,92,246,0.3)]"
+        >
+          {/* Glow Effects */}
+          <div className="absolute -top-4 -left-4 w-40 h-40 bg-gradient-to-br from-cyber to-electric rounded-full blur-3xl opacity-30 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-cyber/5 to-electric/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+          
+          <div className="relative z-10">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyber/20 to-electric/20 border border-cyber/30 mb-6">
+                <Sparkles className="w-4 h-4 text-cyber" />
+                <span className="text-sm font-semibold text-cyber">AI-Powered Automation</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-cyber via-white to-electric bg-clip-text text-transparent">
+                Powered by OpenClaw
+              </h2>
+              <p className="text-white/60 text-lg max-w-3xl mx-auto">
+                Let our AI bot manage your social media automation intelligently. 
+                No coding required - just chat with OpenClaw and watch the magic happen! 🤖
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-10">
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-cyber/10 to-transparent border border-cyber/20 hover:border-cyber/40 transition-all">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyber to-electric flex items-center justify-center mb-4">
+                  <Sparkles className="w-6 h-6 text-void" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Smart Scheduling</h3>
+                <p className="text-white/60 text-sm">
+                  Tell OpenClaw when to post and it handles the rest. Timezone-aware and intelligent.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-cyber/10 to-transparent border border-cyber/20 hover:border-cyber/40 transition-all">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyber to-electric flex items-center justify-center mb-4">
+                  <Terminal className="w-6 h-6 text-void" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Natural Commands</h3>
+                <p className="text-white/60 text-sm">
+                  &quot;Post about AI trends every Monday at 9 AM&quot; - OpenClaw understands and executes.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-cyber/10 to-transparent border border-cyber/20 hover:border-cyber/40 transition-all">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyber to-electric flex items-center justify-center mb-4">
+                  <Rocket className="w-6 h-6 text-void" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Auto-Optimization</h3>
+                <p className="text-white/60 text-sm">
+                  OpenClaw learns from engagement and optimizes posting times for maximum reach.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl bg-gradient-to-r from-void/80 to-void/60 border border-cyber/30">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-cyber to-electric flex items-center justify-center">
+                  <span className="text-void font-bold">🤖</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-lg mb-2">How to Integrate with OpenClaw</h4>
+                  <p className="text-white/70 text-sm mb-4">
+                    Simply tell OpenClaw bot what you want to do - it handles everything for you:
+                  </p>
+                  <div className="space-y-3">
+                    <div className="bg-black/40 p-4 rounded-lg border border-cyber/20">
+                      <p className="text-cyber font-semibold mb-2">Step 1: Install ClawLaunch</p>
+                      <p className="text-white/70 text-sm font-mono">
+                        &quot;Hey OpenClaw, install and configure ClawLaunch for me&quot;
+                      </p>
+                    </div>
+                    <div className="bg-black/40 p-4 rounded-lg border border-electric/20">
+                      <p className="text-electric font-semibold mb-2">Step 2: Give Details</p>
+                      <p className="text-white/70 text-sm">
+                        OpenClaw will ask you:
+                      </p>
+                      <ul className="text-white/60 text-sm mt-2 space-y-1 ml-4">
+                        <li>• Platform (LinkedIn or Twitter/X)</li>
+                        <li>• Topic (AI, Tech, Marketing, etc.)</li>
+                        <li>• Posting time (e.g., 9 AM daily)</li>
+                        <li>• How often (e.g., 3 posts per week)</li>
+                      </ul>
+                    </div>
+                    <div className="bg-black/40 p-4 rounded-lg border border-cyber/20">
+                      <p className="text-cyber font-semibold mb-2">Step 3: Let it Run</p>
+                      <p className="text-white/70 text-sm font-mono">
+                        &quot;Start the scheduler&quot; - Done! OpenClaw manages everything automatically.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-electric/10 to-cyber/10 border border-electric/20">
+                    <p className="text-white/80 text-sm">
+                      💡 <span className="font-semibold">Pro Tip:</span> You can modify settings anytime by chatting with OpenClaw - 
+                      no need to touch the terminal!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Stats Section */}
+      <div className="w-full max-w-7xl mt-24 z-10 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="grid md:grid-cols-4 gap-6"
+        >
+          <div className="glass-card p-8 rounded-2xl border border-electric/20 text-center hover:border-electric/40 transition-all">
+            <div className="text-5xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-2">
+              500+
+            </div>
+            <div className="text-white/60">Downloads</div>
+          </div>
+          <div className="glass-card p-8 rounded-2xl border border-electric/20 text-center hover:border-electric/40 transition-all">
+            <div className="text-5xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-2">
+              50+
+            </div>
+            <div className="text-white/60">Happy Users</div>
+          </div>
+          <div className="glass-card p-8 rounded-2xl border border-electric/20 text-center hover:border-electric/40 transition-all">
+            <div className="text-5xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-2">
+              1000+
+            </div>
+            <div className="text-white/60">Posts Scheduled</div>
+          </div>
+          <div className="glass-card p-8 rounded-2xl border border-electric/20 text-center hover:border-electric/40 transition-all">
+            <div className="text-5xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-2">
+              0%
+            </div>
+            <div className="text-white/60">Ban Risk</div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="w-full max-w-4xl mt-32 z-10 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white via-electric to-cyber bg-clip-text text-transparent">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-white/50">Everything you need to know</p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="glass-card p-6 rounded-xl border border-electric/20 hover:border-electric/40 transition-all">
+              <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                <span className="text-electric">Q:</span> Will this get me banned?
+              </h3>
+              <p className="text-white/70 pl-7">
+                <span className="text-cyber font-semibold">A:</span> No! You click &quot;Post&quot; manually. The platform sees it as you posting normally, so there&apos;s zero risk of bans.
+              </p>
+            </div>
+
+            <div className="glass-card p-6 rounded-xl border border-electric/20 hover:border-electric/40 transition-all">
+              <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                <span className="text-electric">Q:</span> Do I need API keys?
+              </h3>
+              <p className="text-white/70 pl-7">
+                <span className="text-cyber font-semibold">A:</span> Nope! ClawLaunch works without any API access. No tokens, no OAuth, no complicated setup.
+              </p>
+            </div>
+
+            <div className="glass-card p-6 rounded-xl border border-electric/20 hover:border-electric/40 transition-all">
+              <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                <span className="text-electric">Q:</span> How is this different from Buffer or Hootsuite?
+              </h3>
+              <p className="text-white/70 pl-7">
+                <span className="text-cyber font-semibold">A:</span> Buffer and Hootsuite use APIs which can be risky and get restricted. ClawLaunch opens your browser and YOU click post - completely safe and compliant.
+              </p>
+            </div>
+
+            <div className="glass-card p-6 rounded-xl border border-electric/20 hover:border-electric/40 transition-all">
+              <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                <span className="text-electric">Q:</span> Can I try for free?
+              </h3>
+              <p className="text-white/70 pl-7">
+                <span className="text-cyber font-semibold">A:</span> Yes! The free tier gives you 1 post per day (10 posts/month) forever. No credit card required. Try it risk-free!
+              </p>
+            </div>
+
+            <div className="glass-card p-6 rounded-xl border border-electric/20 hover:border-electric/40 transition-all">
+              <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                <span className="text-electric">Q:</span> What platforms are supported?
+              </h3>
+              <p className="text-white/70 pl-7">
+                <span className="text-cyber font-semibold">A:</span> Currently LinkedIn and Twitter/X. More platforms coming soon based on user feedback!
+              </p>
+            </div>
+
+            <div className="glass-card p-6 rounded-xl border border-electric/20 hover:border-electric/40 transition-all">
+              <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                <span className="text-electric">Q:</span> How does the Pro upgrade work?
+              </h3>
+              <p className="text-white/70 pl-7">
+                <span className="text-cyber font-semibold">A:</span> Contact us via WhatsApp or email when you&apos;re ready. We&apos;ll send you a license key that unlocks unlimited features instantly.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Trust Badges */}
+      <div className="w-full max-w-5xl mt-24 z-10 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="glass-card p-8 rounded-2xl border border-electric/20"
+        >
+          <div className="grid md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div className="text-3xl mb-2">✅</div>
+              <div className="font-semibold text-electric">Open Source</div>
+              <div className="text-white/60 text-sm">Transparent code</div>
+            </div>
+            <div>
+              <div className="text-3xl mb-2">💳</div>
+              <div className="font-semibold text-electric">No Credit Card</div>
+              <div className="text-white/60 text-sm">Free tier forever</div>
+            </div>
+            <div>
+              <div className="text-3xl mb-2">🚫</div>
+              <div className="font-semibold text-electric">Zero Ban Risk</div>
+              <div className="text-white/60 text-sm">100% compliant</div>
+            </div>
+            <div>
+              <div className="text-3xl mb-2">⚡</div>
+              <div className="font-semibold text-electric">30 Sec Setup</div>
+              <div className="text-white/60 text-sm">Instant install</div>
             </div>
           </div>
         </motion.div>

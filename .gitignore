@@ -27,6 +27,12 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
+
+# Sensitive user data (API keys, prompts, config)
+.social-poster/
+*.json.bak
+prompt_history.json
 
 # firebase
 .firebase

@@ -1,7 +1,6 @@
 {
   "name": "clawlaunch",
   "version": "0.1.0",
-  "private": true,
   "bin": {
     "clawlaunch": "./cli/bin/cli.js"
   },
@@ -10,19 +9,21 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "node cli/scripts/postinstall.js"
+    "postinstall": "node cli/scripts/postinstall.js",
+    "deploy": "npm run build && firebase deploy"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
+    "firebase": "^12.9.0",
     "framer-motion": "^11.18.2",
+    "inquirer": "^8.2.5",
     "lucide-react": "^0.344.0",
     "next": "^14.2.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "node-cron": "^3.0.3",
-    "inquirer": "^8.2.5",
     "open": "^8.4.2",
-    "chalk": "^4.1.2",
-    "ora": "^5.4.1"
+    "ora": "^5.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

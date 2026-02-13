@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const { saveConfig, loadConfig, checkLimit, checkDailyLimit, checkSchedulerDays, deleteConfig, getConfigPath, resetSchedulerDays } = require('../src/config');
 const { startScheduler, testPost } = require('../src/scheduler');
 const { getAvailableTopics } = require('../src/templates');
+const { initializeLicense, verifyLicense, getUsageStats, getUpgradeInfo, isPro, upgradeToPro } = require('../src/license');
 
 /**
  * Display welcome banner
@@ -72,6 +73,7 @@ async function setupWizard() {
         { name: '💪 Fitness - Health & workout tips', value: 'fitness' },
         { name: '💻 Tech - Technology insights', value: 'tech' },
         { name: '📈 Business - Entrepreneurship tips', value: 'business' },
+        { name: '🔑 Use API Key - Custom AI-generated content', value: 'custom_api' },
         { name: '✨ Default - General tips', value: 'default' }
       ]
     },
@@ -99,14 +101,16 @@ async function setupWizard() {
     {
       type: 'input',
       name: 'postingTime',
-      message: '5️⃣  What time should posts go out? (e.g., "9:00 AM" or "14:30")',
+      message: '5️⃣  What time should posts go out? (e.g., "9:00 AM", "9:00 am", "9:30 PM" or "14:30")',
       default: '9:00 AM',
       validate: (input) => {
-        const pattern = /^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i;
-        if (pattern.test(input.trim())) {
+        const trimmed = input.trim();
+        // Support formats: 9:00 AM, 9:00 am, 9:00 Am, 9:00AM, 9:00am, 14:30
+        const pattern = /^(\d{1,2}):(\d{2})\s*(AM|PM|am|pm|Am|Pm|aM|pM)?$/;
+        if (pattern.test(trimmed)) {
           return true;
         }
-        return 'Please use format "9:00 AM" or "14:30"';
+        return 'Please use format "9:00 AM", "9:30 pm" or "14:30"';
       }
     },
     {
@@ -132,6 +136,83 @@ async function setupWizard() {
       default: false
     }
   ]);
+
+  // If custom_api topic is selected, ask for API key and custom prompt
+  if (answers.topic === 'custom_api') {
+    const { loadPromptHistory, savePromptHistory } = require('../src/config');
+    const promptHistory = loadPromptHistory();
+    
+    // Ask for API key (securely)
+    const apiKeyPrompt = await inquirer.prompt([
+      {
+        type: 'password',
+        name: 'customApiKey',
+        message: '🔑 Enter your OpenAI API key (for content generation):',
+        mask: '*',
+        validate: (input) => {
+          if (input.trim().length > 0) return true;
+          return 'API key is required for custom AI content';
+        }
+      }
+    ]);
+    
+    answers.customApiKey = apiKeyPrompt.customApiKey;
+    
+    // Show previous prompts if available
+    let customPrompt = '';
+    if (promptHistory && promptHistory.length > 0) {
+      const { useHistory } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'useHistory',
+          message: '📝 Use a previous prompt?',
+          default: true
+        }
+      ]);
+      
+      if (useHistory) {
+        const { selectedPrompt } = await inquirer.prompt([
+          {
+            type: 'list',
+            name: 'selectedPrompt',
+            message: 'Select a previous prompt:',
+            choices: [
+              ...promptHistory.map((p, i) => ({ 
+                name: `${p.substring(0, 60)}${p.length > 60 ? '...' : ''}`, 
+                value: p 
+              })),
+              { name: '✏️  Enter new prompt', value: '__NEW__' }
+            ]
+          }
+        ]);
+        
+        if (selectedPrompt !== '__NEW__') {
+          customPrompt = selectedPrompt;
+        }
+      }
+    }
+    
+    // If no prompt selected from history, ask for new one
+    if (!customPrompt) {
+      const promptAnswer = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'customPrompt',
+          message: '✍️  Enter your custom prompt for content generation:',
+          validate: (input) => {
+            if (input.trim().length > 0) return true;
+            return 'Please enter a prompt';
+          }
+        }
+      ]);
+      customPrompt = promptAnswer.customPrompt;
+      
+      // Save to history (max 10 prompts)
+      savePromptHistory(customPrompt);
+    }
+    
+    answers.customPrompt = customPrompt;
+  }
 
   // If AI images are enabled, ask for provider and API key
   if (answers.enableAIImages) {
@@ -195,6 +276,11 @@ async function showMainMenu() {
     { name: '❌ Exit', value: 'exit' }
   ];
   
+  // Add upgrade option for free users
+  if (!isPro()) {
+    choices.splice(3, 0, { name: '💎 Upgrade to Pro', value: 'upgrade' });
+  }
+  
   const { action } = await inquirer.prompt([
     {
       type: 'list',
@@ -218,9 +304,15 @@ function showStatus() {
     return;
   }
   
-  const limit = checkLimit();
-  const dailyLimit = checkDailyLimit();
-  const schedulerCheck = checkSchedulerDays();
+  // Verify license first
+  const verification = verifyLicense();
+  if (!verification.valid) {
+    initializeLicense();
+  }
+  
+  const stats = getUsageStats();
+  const upgradeInfo = getUpgradeInfo();
+  const pro = isPro();
   
   console.log(chalk.cyan('\n📊 Current Status:\n'));
   console.log(chalk.gray(`   Platform: ${config.platform}`));
@@ -229,24 +321,35 @@ function showStatus() {
   console.log(chalk.gray(`   Schedule: ${config.postsPerWeek} posts/week at ${config.postingTime}`));
   console.log(chalk.gray(`   Timezone: ${config.timezone}`));
   console.log(chalk.gray(`   AI Images: ${config.enableAIImages ? 'Enabled (' + (config.aiImageProvider || 'pollinations') + ')' : 'Disabled'}`));
-  console.log(chalk.gray(`   Config: ${getConfigPath()}`));
-  console.log('');
-  console.log(chalk.cyan(`   📅 Scheduler Days: Day ${schedulerCheck.daysUsed + 1} of 5`));
-  if (schedulerCheck.needsReconfigure) {
-    console.log(chalk.red('   ⚠️  Scheduler reconfiguration needed!'));
-  } else {
-    console.log(chalk.gray(`   ${5 - schedulerCheck.daysUsed} days remaining`));
+  if (config.topic === 'custom_api' && config.customPrompt) {
+    console.log(chalk.gray(`   Custom Prompt: "${config.customPrompt.substring(0, 50)}${config.customPrompt.length > 50 ? '...' : ''}"`));
   }
   console.log('');
-  console.log(chalk.cyan(`   📊 Daily Usage: ${dailyLimit.current}/${dailyLimit.total} post today`));
-  console.log(chalk.gray(`   ${dailyLimit.remaining} post remaining today`));
-  console.log('');
-  console.log(chalk.cyan(`   📊 Monthly Usage: ${limit.current}/${limit.total} posts`));
-  console.log(chalk.gray(`   ${limit.remaining} posts remaining`));
   
-  if (!limit.allowed) {
-    console.log(chalk.red('\n   ⚠️  Monthly limit reached!'));
-    console.log(chalk.yellow('   Resets on the 1st of next month'));
+  // License info
+  if (pro) {
+    console.log(chalk.green('💎 License: PRO (Unlimited)\n'));
+  } else {
+    console.log(chalk.yellow('📦 License: FREE (Limited)\n'));
+    console.log(chalk.cyan('   📊 Usage Limits:'));
+    console.log(chalk.gray(`   Today: ${stats.dailyCount}/1 post`));
+    console.log(chalk.gray(`   This Month: ${stats.monthlyCount}/10 posts`));
+    console.log(chalk.gray(`   Total Posts: ${stats.totalPosts}`));
+    console.log('');
+    
+    if (stats.monthlyCount >= 8 || stats.dailyCount >= 1) {
+      console.log(chalk.yellow('   ⚠️  Getting close to your limit!\n'));
+    }
+    
+    console.log(chalk.bold.green('   🚀 Upgrade to Pro for:'));
+    upgradeInfo.features.pro.forEach(feature => {
+      console.log(chalk.green(`      ✅ ${feature}`));
+    });
+    console.log('');
+    console.log(chalk.bold.yellow('   📞 Contact us to upgrade:'));
+    console.log(chalk.white(`      📱 WhatsApp: ${upgradeInfo.contact.whatsapp}`));
+    console.log(chalk.white(`      📧 Email: ${upgradeInfo.contact.email}`));
+    console.log(chalk.cyan(`      🔗 ${upgradeInfo.contact.whatsappLink}`));
   }
   
   console.log('');
@@ -256,6 +359,12 @@ function showStatus() {
  * Main CLI entry point
  */
 async function main() {
+  // Initialize license on first run
+  const verification = verifyLicense();
+  if (!verification.valid) {
+    initializeLicense();
+  }
+  
   // Parse command line arguments
   const args = process.argv.slice(2);
   const command = args[0] || '';
@@ -446,6 +555,57 @@ async function main() {
         await inquirer.prompt([{ type: 'input', name: 'continue', message: '' }]);
         break;
         
+      case 'upgrade':
+        const upgradeInfo = getUpgradeInfo();
+        console.log(chalk.bold.green('\n💎 Upgrade to ClawLaunch Pro\n'));
+        console.log(chalk.cyan('Unlock unlimited features:\n'));
+        upgradeInfo.features.pro.forEach(feature => {
+          console.log(chalk.green(`  ✅ ${feature}`));
+        });
+        console.log('');
+        console.log(chalk.bold.yellow('📞 Contact us to get your Pro license:\n'));
+        console.log(chalk.white(`  📱 WhatsApp: ${upgradeInfo.contact.whatsapp}`));
+        console.log(chalk.white(`  📧 Email: ${upgradeInfo.contact.email}`));
+        console.log(chalk.cyan(`  🔗 Quick Link: ${upgradeInfo.contact.whatsappLink}\n`));
+        console.log(chalk.gray('We\'ll send you a license key after payment!\n'));
+        
+        const { hasKey } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'hasKey',
+            message: 'Already have a Pro license key?',
+            default: false
+          }
+        ]);
+        
+        if (hasKey) {
+          const { licenseKey } = await inquirer.prompt([
+            {
+              type: 'input',
+              name: 'licenseKey',
+              message: 'Enter your Pro license key:',
+              validate: (input) => {
+                if (input.trim().length > 0) return true;
+                return 'Please enter a valid license key';
+              }
+            }
+          ]);
+          
+          const result = upgradeToPro(licenseKey.trim());
+          if (result.success) {
+            console.log(chalk.green('\n✅ License activated successfully!'));
+            console.log(chalk.bold.green('🎉 Welcome to ClawLaunch Pro!\n'));
+            console.log(chalk.gray('You now have unlimited access to all features.\n'));
+          } else {
+            console.log(chalk.red(`\n❌ License activation failed: ${result.error}\n`));
+            console.log(chalk.yellow('Please contact support if you believe this is an error.\n'));
+          }
+        }
+        
+        console.log(chalk.gray('Press Enter to continue...'));
+        await inquirer.prompt([{ type: 'input', name: 'continue', message: '' }]);
+        break;
+      
       case 'reconfigure':
         const { confirm } = await inquirer.prompt([
           {

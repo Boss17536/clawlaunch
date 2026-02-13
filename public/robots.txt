@@ -1,0 +1,8 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin or sensitive areas (if any in future)
+# Disallow: /admin/
+
+Sitemap: https://clawlaunch.web.app/sitemap.xml

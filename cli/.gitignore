@@ -2,3 +2,8 @@ node_modules/
 .DS_Store
 *.log
 .env
+
+# Sensitive user data (API keys, prompts, config)
+.social-poster/
+*.json.bak
+prompt_history.json

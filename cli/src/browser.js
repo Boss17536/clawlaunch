@@ -80,7 +80,13 @@ async function openPostInBrowser(platform, topic, config = {}) {
     // Get random template for the topic with specified length
     spinner.start('Generating post content...');
     const postLength = config.postLength || 'short';
-    const postText = getRandomTemplate(topic, postLength, config);
+    let postText = getRandomTemplate(topic, postLength, config);
+    
+    // Handle async content generation for custom_api
+    if (postText instanceof Promise) {
+      postText = await postText;
+    }
+    
     spinner.succeed('Post content generated');
     
     // Show preview
@@ -165,11 +171,17 @@ async function openPostInBrowser(platform, topic, config = {}) {
  * @param {string} platform - Platform name
  * @param {string} topic - Topic for template selection
  * @param {Object} config - User configuration
- * @returns {Object} - Preview object
+ * @returns {Object|Promise<Object>} - Preview object
  */
-function getPostPreview(platform, topic, config = {}) {
+async function getPostPreview(platform, topic, config = {}) {
   const postLength = config.postLength || 'short';
-  const postText = getRandomTemplate(topic, postLength);
+  let postText = getRandomTemplate(topic, postLength, config);
+  
+  // Handle async content generation for custom_api
+  if (postText instanceof Promise) {
+    postText = await postText;
+  }
+  
   const urlBuilder = platformUrls[platform.toLowerCase()];
   
   if (!urlBuilder) {
